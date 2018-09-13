@@ -1,0 +1,2 @@
+cmd
+ir a c:\Program Files\PostgreSQL\9.2\bin\pg_ctl.exe start -D ..\data

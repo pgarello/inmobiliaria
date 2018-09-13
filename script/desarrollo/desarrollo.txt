@@ -1,0 +1,74 @@
+14-07-2009
+
+Controlar reglas de negocio:
+ 1)	Al dar de alta un contrato de alquiler sobre una propiedad, dicha propiedad
+	debe tener asignado el propietario de la misma.
+ 2)	Validar que no se puede modificar el propietario de una propiedad (tampoco
+ 	eliminar) si dicha propiedad esta relacionada con un contrato vigente.
+ 	
+-------------------------------------------------------------------------------
+
+16-07-2009
+
+ 3)Ver que información se va a mostrar (CONTABLE) de un contrato ¿?
+ 
+ 
+-------------------------------------------------------------------------------
+27/08/2009
+
+Voy a tener que modificar la estructura de datos …. ahora los comprobantes LIQUIDACION COBRANZA – 
+recibos cobro (los que paga el inquilino) estan atados a un Contrato.
+En el comprobante sale en la cabecera el domicilio del inmueble alquilado y el vencimiento del contrato.
+Si el filtro arranca contra un inquilino, y este tiene mas de una propiedad alquilada, hay q seleccionar 
+la primera y si quiere otra se filtra desde la propiedad.  Validar q el contrato este vigente … obvio... 
+
+-------------------------------------------------------------------------------
+13/07/2015
+
+Archivo txt con las facturas electrónicas (inquilinos + propietarios)
+SITI Registro de Información de Compras y Ventas. (quiere el archivo para poder cargar en el sistema)
+
+FACTURA ELECTRONICA A LOS PROPIETARIOS.
+Solo comisiones + IVA
+Pueden ser A/B
+
+LIQUIDACIONES PAGO (Identificar si son A o B) en base a la responsabilidad del Propietario.
+Actualmente son las liquidaciones que empiezan con 6 (Por ejemplo 60001226 --> Liq. B 1226) FACTURA B
+Actualmente son las liquidaciones que empiezan con 5 (Por ejemplo 50001226 --> Liq. A 1226) FACTURA A
+Las liquidaciones que son liquidaciones PURAS empiezan con 0000 (Por ejemplo 00001226)
+
+Se identifican los casos entre los propietarios que nos entregan las facturas para el inquilino y los que no.
+Los que si, están todos ok
+
+-------------------------------------------------------------------------------
+16/06/2016
+
+Quiero registrar las facturas electrónicas que levanto desde la web y asociarlas a
+los recibos correspondientes...
+
+1º Identificar que tipo de comprobante es para después saber si es propietario o inquilino
+	a - reviso todos los inquilinos.
+		Evaluo primero el CUIT/DNI
+		Obtengo todos los recibos (sin asociar aun)
+		Después el monto
+		Fechas ????
+		
+PETICIÓN DE NICOLAS2
+Poder ver en un periodo que inquilinos no pagaron (deudores) y a que propietarios no se les pagó.
+Le puedo agregar el cruce de lo que: 
+	se cobro y no se pago
+	no se cobro y se pago
+	
+
+-------------------------------------------------------------------------------
+06/03/2018
+
+Cuando agrego un recibo a un inquilino por fuera de las novedades del contrato, por ejemplo
+si le cobro la pintura o gastos varios, no puedo ver el recibo desde el contrato y estaría relacionado !!!
+
+alternativas:
+a. 	agrego una novedad genérica a todos los contratos en la que asiento todos estos gastos
+	del tipo "Cierre de Contrato" cuando la creo no se el monto, va con monto 0
+b. 	la creo cuando lo necesito, el tema es que no tengo una novedad y la única forma de relacionarlo
+	al recibo con el contrato es a travez de la novedad. No tengo seleccionado un contrato, ya que puede haber
+	novedades de varios contratos.(si el inquilino es el mismo de disintos contratos???) VER SI ES ASÍ

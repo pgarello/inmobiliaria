@@ -1,0 +1,38 @@
+##########################################################################
+PASOS NECESARIOS PARA  LA UTILIZACION DEL WEB SERVICE DE AUTENTICACION
+##########################################################################
+1) Agregar en el server en el cual va a correr el servicio, la clave publica 
+   del server LDAP: (Suponiendo que el archivo con la clave es ldap.cer, y que
+   $app_serv es el path de instalacion de glassfish)
+
+   cd $app_serv/domains/DOMINIO/config
+   keytool -import -file ldap.cer -keystore cacerts.jks -trustcacerts
+
+2) Generar la clave autofirmada del server; en caso de usarse el comando keytool
+   la secuencia de acciones es
+
+   cd $app_serv/domains/DOMINIO/config
+   keytool -genkey -alias NOMBRE_DEL_SERVER -keyalg RSA -keypass changeit \
+           -storepass changeit -keystore keystore.jks
+   keytool -export -alias NOMBRE_DEL_SERVER -storepass changeit \
+           -file localhost.cer -keystore keystore.jks -rfc
+
+   Independientemente de como se genere la clave del server, el Distinguished 
+   Name del certificado debe ser igual al nombre del dominio.
+
+3) Quitar la clave incluida por defecto en glassfish
+
+   cd $app_serv/domains/DOMINIO/config
+   keytool -delete -alias s1as -keystore keystore.jks
+
+4) Reiniciar el dominio
+   $app_serv/bin/asadmin stop-domain DOMINIO
+   $app_serv/bin/asadmin start-domain DOMINIO
+
+5) Deployar el web service
+
+6) Importar las clases para comunicarse con el web service.
+   wsimport -p framework.nr.seguridad -keep \
+   https://SERVER:8181/AutenticadorService/AutenticadorWS?wsdl
+
+ 
