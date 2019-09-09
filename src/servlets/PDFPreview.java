@@ -399,7 +399,7 @@ public class PDFPreview extends HttpServlet {
         	this.listadoCobros(usuario, request);
         	
         	// SI QUIERO QUE SALGA EN EXCEL
-        	//this.imprimirODS(request, response, "listado_recibosCobro");
+        	this.imprimirODS(request, response, "listado_recibosCobro");
         	return;
 
 /********************************************************************************************************************/        	
@@ -502,22 +502,24 @@ public class PDFPreview extends HttpServlet {
 															dFiltro_fecha_desde, 
 															dFiltro_fecha_hasta);
     	
-    	System.out.println("Recibos de cobro " + pRecibos.getList().size());    	
-    	ArrayList<ReciboCobro> recibos = (ArrayList<ReciboCobro>) pRecibos.getList();
+    	System.out.println("PDFPreview Listado Recibos de cobro " + pRecibos.getList().size());    	
+    	//ArrayList<ReciboCobro> recibos = (ArrayList<ReciboCobro>) pRecibos.getList();
+    	ArrayList<ReciboCobro> recibos = new ArrayList<ReciboCobro> ( pRecibos.getList());
     	try {
 			ReciboCobroProcesos.completar(recibos);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//    	for (ReciboCobro obj : recibos) {
-//    		System.out.println(obj.getPersona().getDescripcion());
-//    	}
+    	for (ReciboCobro obj : recibos) {
+    		obj.getPersona().getDescripcion();
+    	}
     	
     	
     	oDS1 = new JRBeanCollectionDataSource(recibos);
     	reportFile = new File(getServletContext().getRealPath("/reportes/listado_recibosCobro.jasper"));
     	parameters.put("usuario", usuario);
     	parameters.put("path", "http://" + request.getServerName()+":"+request.getServerPort()+"/");
+    	parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
     	return;
     }
     
@@ -566,6 +568,7 @@ public class PDFPreview extends HttpServlet {
     	reportFile = new File(getServletContext().getRealPath("/reportes/listado_recibosPago.jasper"));
     	parameters.put("usuario", usuario);
     	parameters.put("path", "http://" + request.getServerName()+":"+request.getServerPort()+"/");
+    	parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
     	return;
     }
     

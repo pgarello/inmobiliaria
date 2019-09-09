@@ -28,7 +28,7 @@ public class FacturaElectronica {
 	  	@param args
 	  	url www.afip.gov.ar
 		27061396778
-		alicia2021
+		Alicia2021
 		--> entrar a "comprobantes en línea"
 		
 		El archivo que lee es: CABECERA.txt
