@@ -1,0 +1,24 @@
+Sitio WEB: 
+https://github.com/pgarello/inmobiliaria
+usuario: pgarello@gmail.com
+
+Abrir git Bash
+
+$ git version
+git version 2.19.0.windows.1
+
+cd "C:\Pablo\Espacios de trabajo\workspace\InmobiliariaApp"
+
+git init
+git add README.md
+git commit -m "first commit"
+git config --global user.email "pgarello@gmail.com"
+git config --global user.name "Pablo Garello"
+
+git commit -m "first commit"
+git remote add origin https://github.com/pgarello/inmobiliaria.git
+git push -u origin master
+
+git add .
+git commit -m 'comentario'
+git push
