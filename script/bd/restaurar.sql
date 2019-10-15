@@ -1,6 +1,6 @@
 -- 0º BORRAR LA BASE DE DATOS Y CREARLA VACIA
 
-DROP DATABASE inmobiliaria_prod;
+DROP DATABASE inmobiliaria;
 
 CREATE DATABASE inmobiliaria_prod
   WITH ENCODING='UTF8'
@@ -21,3 +21,8 @@ CREATE DATABASE inmobiliaria
 --3º (YA NO) Copiar el backup a ese directorio para no tener problemas de referenciarlo.
 --4º Ejecutar psql.exe -U postgres -d inmobiliaria_prod -f C:\Pablo\desarrollos\Inmobiliaria\Acuario\backupbd\julio2013.backup
 --		contraseña dba_inmobiliaria --> dba
+
+-- para borrar
+-- 		dropdb.exe -U postgres -d inmobiliaria
+--		Si da error por que hay otras conecciones ir a "Administrador de Tareas de Windows" y detener e iniciar el servicio POSTGRESQL
+--		

@@ -90,7 +90,7 @@ $F{contratoNovedadCobro.contrato.inmueble.localidad.descripcion}]]></textFieldEx
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
 				<reportElement key="textField" x="432" y="0" width="93" height="18"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
@@ -132,7 +132,7 @@ $F{contratoNovedadCobro.contrato.inmueble.localidad.descripcion}]]></textFieldEx
 	</columnFooter>
 	<pageFooter>
 		<band height="132" splitType="Stretch">
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
 				<reportElement key="textField" x="390" y="86" width="135" height="18"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>

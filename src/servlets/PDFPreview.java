@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.servlet.*;
@@ -445,9 +446,12 @@ public class PDFPreview extends HttpServlet {
 
             try {
             	            	
-                //String jr = JasperCompileManager.compileReportToFile(request.getRealPath("/reportes/comprobante_prueba.jrxml"));
-                
+                //String jr = JasperCompileManager.compileReportToFile(request.getRealPath("/reportes/comprobante_prueba.jrxml"));                
                 //byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(),parameters, new JREmptyDataSource());
+            	
+            	Locale oLocale = new Locale("es", "AR");
+            	parameters.put(JRParameter.REPORT_LOCALE, oLocale);
+            	
                 byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(),parameters, oDS1);
 				
                 ServletOutputStream ouputStream = response.getOutputStream();
@@ -679,6 +683,9 @@ public class PDFPreview extends HttpServlet {
         	response.setContentType("application/xls");
    			response.setHeader("Content-Disposition", "attachment; filename=\""+reporte_jrxml+".xls\"");
         	
+   			Locale oLocale = new Locale("es", "AR");
+        	parameters.put(JRParameter.REPORT_LOCALE, oLocale);
+   			
    			JasperPrint jasperPrint = JasperFillManager.fillReport(	reportStream, parameters , oDS1);
 
 			JRXlsExporter exporter = new JRXlsExporter();
