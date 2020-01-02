@@ -119,28 +119,48 @@ public class ContratoListadoVencidosView extends ABMListadoPrintView {
     }
     
     private int fila_color = -1;
-    private TableCellRenderer randomizingCellRenderer = new TableCellRenderer() {
-    	  
+//    private TableCellRenderer randomizingCellRenderer = new TableCellRenderer() {
+//    	  
+//        public Component getTableCellRendererComponent(Table table, Object value, int column, int row) {
+//        	//System.out.println("haber " + value.getClass().getName() + " - " + column + " - " + row);     	
+//        	Label label = null;        	
+//        	if (column == 1) {   
+//        		//label = new Label("");
+//        		if ((Boolean)value) {
+//        			if (fila_color != row) fila_color = row;
+//        		}   		
+//        	} else {
+//        		label = new Label(value == null ? null : value.toString());
+//        		if (fila_color == row) {
+//            		TableLayoutData layoutData = new TableLayoutData();
+//        			layoutData.setBackground(Color.GREEN);            
+//        			label.setLayoutData(layoutData);
+//            	}
+//        	}        	
+//        	      	
+//            return label;
+//        }        
+//    };
+    
+    private TableCellRenderer randomizingCellRenderer = new TableCellRenderer() {        
         public Component getTableCellRendererComponent(Table table, Object value, int column, int row) {
-        	//System.out.println("haber " + value.getClass().getName() + " - " + column + " - " + row);     	
-        	Label label = null;        	
-        	if (column == 1) {   
-        		//label = new Label("");
-        		if ((Boolean)value) {
-        			if (fila_color != row) fila_color = row;
-        		}   		
-        	} else {
+        	//System.out.println("haber " + value + " - " + column + " - " + row + " " + fila_color);
+        	Label label = null;
+        	if (column == 1) {
+        		if (value.toString().equals("*"))
+        			if (fila_color != row) fila_color = row;        			
+        	} else {        	        	
         		label = new Label(value == null ? null : value.toString());
         		if (fila_color == row) {
             		TableLayoutData layoutData = new TableLayoutData();
-        			layoutData.setBackground(Color.GREEN);            
+        			layoutData.setBackground(Color.ORANGE);            
         			label.setLayoutData(layoutData);
             	}
-        	}        	
-        	      	
+        	}
             return label;
-        }        
+        }
     };
+    
     
     
     

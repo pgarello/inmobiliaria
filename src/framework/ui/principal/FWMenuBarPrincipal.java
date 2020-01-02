@@ -308,6 +308,11 @@ public class FWMenuBarPrincipal extends CCMenuBar implements nextapp.echo2.app.e
 			miItem4_2.addActionListener(this);        
 		mMenu4.add(miItem4_2);
 		
+		CCMenuItem miItem4_3 = new CCMenuItem("Configuración");		
+		miItem4_3.setCommand("app.informes.ConfiguracionView");
+		miItem4_3.addActionListener(this);        
+		mMenu4.add(miItem4_3);
+		
         add(mMenu4);
         
     }
