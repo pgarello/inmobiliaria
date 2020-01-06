@@ -71,8 +71,9 @@ public class PagoItemAddModel extends AbstractTableModel {
 				monto_novedad = moneda.format(currentObject.getContratoNovedadPago().getSaldo());
 			
 		} catch(NullPointerException npe) {
-			npe.printStackTrace();
-			// Aca no hago nothing ?????
+			// npe.printStackTrace();
+			// Aca no hago nothing ????? Es cuando el item no es sobre una propiedad ??? creo !!!
+			System.out.println("PagoItemAddModel.getValueAt - línea 76 - NullPointerException " + currentObject.getDescripcion());
 		}
 		
 		// Proceso la leyenda para los impuestos

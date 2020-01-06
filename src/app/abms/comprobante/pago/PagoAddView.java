@@ -101,7 +101,7 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
     private CCButton btnPrint;
     protected CCRow rBotones_barra;
 
-    
+    private CCButton btnFiltrar;
     
     
     private CCColumn _cPrincipal, cLabels, cTexts;
@@ -329,6 +329,11 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
         oComboAnios = new ComboAnios(100,22,10,true,(short)2);
         oComboMeses = new ComboMeses(100,22,11,true,(short)2);
         
+        /* Configuro el boton de cálculo de intereses */
+        btnFiltrar = new CCButton("Filtrar");
+        btnFiltrar.setActionCommand("filtrar");
+        btnFiltrar.addActionListener(this);
+        
         /*******************************************************************/
         /* Tabla con el resultado de la búsqueda */
     	this.oTable = new CCTable("");
@@ -391,6 +396,8 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
         rMesAnio.add(oComboMeses);
         rMesAnio.add(new Separator());
         rMesAnio.add(oComboAnios);
+        rMesAnio.add(new Separator());
+        rMesAnio.add(btnFiltrar);
         
         rVacio.add(new CCLabel(" "));
         
@@ -606,6 +613,14 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
     		// Aca lanzo la impresión
     		doPrint();
     		
+    	} else if (ae.getActionCommand().equals("filtrar")){
+    		
+    		// Aca vuelvo a filtrar
+    		if (oPropietario != null)
+    			setResultado(oPropietario);
+    		else if (oInmueble != null)
+    			setResultado(oInmueble);
+
     	}
 
     	

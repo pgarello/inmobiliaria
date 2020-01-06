@@ -187,14 +187,22 @@ public class ReciboPagoItemProcesos {
 		
 		/* Busco el porcentaje de descuento que le tengo que aplicar al propietario */
 		float porcentaje_retencion = 0;
-		if (oPropietario != null)
+		float ganancia_exento = 0;
+		if (oPropietario != null) {
 			porcentaje_retencion = getPorcentajeRetencionPorPropietario(oPropietario.getIdInscripcionGanancias());
+			if (oPropietario.getIdInscripcionGanancias() != ComboGANANCIAS.NoInscripto )
+				ganancia_exento = getMontoExentoGananciaPorPropietarioMes();
+		}
 		System.out.println("completarItemsPagoConGANANCIA.porcentaje_retencion " + porcentaje_retencion);
 		
 		
 		/* Busco el monto que está exento de GANANCIAS 
-		   El monto es mensual, debería chequear que ya no se haya utilizado en este mes */
-		float ganancia_exento = getMontoExentoGananciaPorPropietarioMes();
+		   El monto es mensual, debería chequear que ya no se haya utilizado en este mes 
+		   
+		   Solo para los que están inscriptos - los NO INSCRIPTOS no tienen mínimo ganancia_exento = 0 
+		   Pgarello 3/01/2020
+		   */
+				
 		System.out.println("completarItemsPagoConGANANCIA.ganancia_exento " + ganancia_exento);
 		
 		/**
@@ -213,7 +221,21 @@ public class ReciboPagoItemProcesos {
 				
 				retencion = retencion.setScale(2, RoundingMode.HALF_UP);
 				monto_retencion = retencion.floatValue();
-			}						
+			}
+			
+			/*
+			 * Nuevo control - Mínimo del impuesto
+			 * INSCRIPTO 240
+			 * NO INSCRIPTO 1020
+			 * Si no alcanza este monto va CEROOOOO
+			 * Pgarello 03/01/2020
+			 */
+			float monto_minimo = 0;
+			if (oPropietario != null) {
+				monto_minimo = getMinimoGANANICASPorPropietario(oPropietario.getIdInscripcionGanancias());
+				if ( monto_minimo > monto_retencion )
+					monto_retencion = 0;
+			}	
 			
 		}
 		System.out.println("completarItemsPagoConGANANCIA.monto_retencion " + monto_retencion);
@@ -248,6 +270,23 @@ public class ReciboPagoItemProcesos {
 	}
 	
 	
+	private static float getMinimoGANANICASPorPropietario(Short idInscripcionGanancias) {
+		float minimo = 0;
+		
+		if (idInscripcionGanancias == ComboGANANCIAS.Inscripto || idInscripcionGanancias == ComboGANANCIAS.Monotributo ) {
+			minimo = SetupDAO.findGANANCIA("GANANCIA-MINIMO-INSCRIPTO");
+			
+		} else if(idInscripcionGanancias == ComboGANANCIAS.NoInscripto ) {
+			minimo = SetupDAO.findGANANCIA("GANANCIA-MINIMO-NO_INSCRIPTO");
+			
+		} else if(idInscripcionGanancias == ComboGANANCIAS.Exento ) {
+			// va en 0			
+		}
+		
+		return minimo;
+	}
+
+
 	private static float getPorcentajeRetencionPorPropietario(int id_inscripcion_ganancia) {
 		
 		float retencion = 0;

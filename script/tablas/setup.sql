@@ -58,5 +58,8 @@ UPDATE setup SET fecha_actualizacion = now() WHERE id_setup = 4;
 INSERT INTO setup VALUES( (SELECT max(id_setup)+1 FROM setup) , null, 'GANANCIA-EXENTO', null, 11200, 'Es el monto que está EXENTO del pago de GANANCIAS');
 UPDATE setup SET fecha_actualizacion = now() WHERE id_setup = 7;
 
+INSERT INTO setup VALUES( (SELECT max(id_setup)+1 FROM setup) , null, 'GANANCIA-MINIMO-INSCRIPTO', null, 240, 'Es el monto que mínimo para el pago de GANANCIAS');
+INSERT INTO setup VALUES( (SELECT max(id_setup)+1 FROM setup) , null, 'GANANCIA-MINIMO-NO_INSCRIPTO', null, 1020, 'Es el monto que mínimo para el pago de GANANCIAS');
+
 -- índices ---------------------------------------------------------------------
 -- CREATE INDEX contrato_idx1 ON contrato (id_inmueble);
