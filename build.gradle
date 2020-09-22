@@ -1,0 +1,34 @@
+// gradle INMOBILIARIA
+
+apply plugin: 'java'
+apply plugin: 'war'
+    
+sourceCompatibility = 1.8
+targetCompatibility = 1.8 
+
+repositories {
+	/*maven {
+		url = "https://servicios.unl.edu.ar/nexus/content/groups/public"
+	}*/
+	maven {
+      	url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+	compile 'javax:javaee-api:8.0'
+}
+
+sourceSets {
+    main {
+		java {
+			srcDirs = ['src']
+		}
+	}
+}
+
+war {
+    from 'src'
+    webInf { from 'WebRoot/WEB-INF' }
+    webXml = file('WebRoot/WEB-INF/web.xml')
+}
