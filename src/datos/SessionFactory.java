@@ -1,4 +1,7 @@
 package datos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -60,7 +63,10 @@ public class SessionFactory {
     }*/
     
     public static Session currentSession() throws HibernateException {
-    	Session session = (Session) threadLocal.get();
+    	
+    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "SessionFactory.currentSession");
+    	
+    	Session session = (Session) threadLocal.get();    	    	    	
     	if (session != null && !session.isOpen()) session = null;
     	if (session == null) {
 	    	if (sessionFactory == null) {

@@ -6,6 +6,12 @@ apply plugin: 'war'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8 
 
+compileJava.options.encoding = 'ISO-8859-1'
+	
+tasks.withType(JavaCompile) {
+    options.encoding = 'ISO-8859-1'
+}
+
 repositories {
 	/*maven {
 		url = "https://servicios.unl.edu.ar/nexus/content/groups/public"
@@ -13,10 +19,49 @@ repositories {
 	maven {
       	url "https://plugins.gradle.org/m2/"
     }
+    
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
 	compile 'javax:javaee-api:8.0'
+	
+	compile 'echopointng:echopointng:2.1.0rc4'
+	
+	compile name:'Echo2_App', ext:'jar'
+	compile name:'Echo2_WebContainer', ext:'jar'
+	compile name:'Echo2_WebRender', ext:'jar'
+	
+	//compile group: 'com.nextapp', name: 'echo2-app', version: '2.1.1'
+	//compile group: 'com.nextapp', name: 'echo2-webcontainer', version: '2.1.1'
+	
+	// https://mvnrepository.com/artifact/com.nextapp/echo2-webrender
+	//compile group: 'com.nextapp', name: 'echo2-webrender', version: '2.1.1'
+
+	// REPORTES ----------------------------------------------------------------------------------                 		        
+        // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports       
+        compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.7.1'
+        //compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '3.7.3'
+		
+		// Esta librerí­a está en JASPER como opcional
+		compile group: 'org.apache.poi', name: 'poi', version: '3.15' // https://mvnrepository.com/artifact/org.apache.poi/poi
+        
+        // https://mvnrepository.com/artifact/com.lowagie/itext
+		compile group: 'com.lowagie', name: 'itext', version: '2.1.7'
+                
+        //por error
+		//The type java.lang.CharSequence cannot be resolved. It is indirectly referenced from required .class files
+		//porque la version de jasper 5.6 viene con la jdt 3.1.0
+		//compile group: 'org.eclipse.jdt', name: 'core', version: '3.1.1'                
+    // FIN ----------------------------------------------------------------------------------
+
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate
+	compileOnly group: 'org.hibernate', name: 'hibernate', version: '3.1'
+	
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
+
 }
 
 sourceSets {
@@ -28,7 +73,8 @@ sourceSets {
 }
 
 war {
-    from 'src'
-    webInf { from 'WebRoot/WEB-INF' }
-    webXml = file('WebRoot/WEB-INF/web.xml')
+    from 'WebRoot'
+    archiveName ='InmobiliariaApp.war'
+    //webInf { from 'WebRoot/WEB-INF' }
+    //webXml = file('WebRoot/WEB-INF/web.xml')
 }

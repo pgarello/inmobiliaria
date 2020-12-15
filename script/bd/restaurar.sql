@@ -22,6 +22,9 @@ CREATE DATABASE inmobiliaria
 --4º Ejecutar psql.exe -U postgres -d inmobiliaria_prod -f C:\Pablo\desarrollos\Inmobiliaria\Acuario\backupbd\julio2013.backup
 --		contraseña dba_inmobiliaria --> dba
 
+-- LINUX      
+-- psql -U postgres -d inmobiliaria -f /tmp/mayo2020.backup
+       
 -- para borrar
 -- 		dropdb.exe -U postgres -d inmobiliaria
 --		Si da error por que hay otras conecciones ir a "Administrador de Tareas de Windows" y detener e iniciar el servicio POSTGRESQL

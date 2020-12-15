@@ -121,9 +121,10 @@ public class UsuarioFacade {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	public static Usuario findByLogin(Object valueUsuario, Object valueClave) {
 		Session oSessionH = SessionFactory.currentSession();
+		
+		// Es una búsqueda, no necesito transaccionar
 		Transaction tx = oSessionH.beginTransaction();
 		Usuario oUsuario;
 		try {
