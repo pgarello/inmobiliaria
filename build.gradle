@@ -2,6 +2,7 @@
 
 apply plugin: 'java'
 apply plugin: 'war'
+
     
 sourceCompatibility = 1.8
 targetCompatibility = 1.8 
@@ -11,6 +12,8 @@ compileJava.options.encoding = 'ISO-8859-1'
 tasks.withType(JavaCompile) {
     options.encoding = 'ISO-8859-1'
 }
+
+version = version
 
 repositories {
 	/*maven {
@@ -25,14 +28,30 @@ repositories {
     }
 }
 
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.2.3'
+    }
+}
+
+apply plugin: 'com.bmuschko.cargo'
+
+
 dependencies {
 	compile 'javax:javaee-api:8.0'
 	
 	compile 'echopointng:echopointng:2.1.0rc4'
 	
+	
 	compile name:'Echo2_App', ext:'jar'
 	compile name:'Echo2_WebContainer', ext:'jar'
 	compile name:'Echo2_WebRender', ext:'jar'
+
 	
 	//compile group: 'com.nextapp', name: 'echo2-app', version: '2.1.1'
 	//compile group: 'com.nextapp', name: 'echo2-webcontainer', version: '2.1.1'
@@ -78,3 +97,41 @@ war {
     //webInf { from 'WebRoot/WEB-INF' }
     //webXml = file('WebRoot/WEB-INF/web.xml')
 }
+
+
+task deploy (dependsOn: war){
+    
+    copy {
+        from "build/libs"
+        into "/home/pgarello/opt/apache-tomcat-9.0.38/webapps"
+        include "*.war"
+    }
+}
+
+task deployToLocal (dependsOn: war) {   
+	println "Starting Cargo"
+    cargo {
+	    containerId = 'tomcat9x'
+	    port = 8085
+	
+		local {
+            homeDir = file("/home/pgarello/opt/apache-tomcat-9.0.38")
+        }
+	
+	    deployable {
+	    	file = file("build/libs") 
+	        context = '/InmobiliariaApp'
+	    }
+/*	    
+	    remote {
+     		hostname = "127.0.0.1"
+        	username = "tomcat"
+        	password = "admin"
+        	timeout = 6000
+    	}
+*/
+	}
+
+}
+    
+
