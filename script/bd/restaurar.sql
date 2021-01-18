@@ -14,6 +14,10 @@ CREATE DATABASE inmobiliaria
        LC_COLLATE = 'Spanish_Argentina.1252'
        LC_CTYPE = 'Spanish_Argentina.1252'
        CONNECTION LIMIT = -1;
+
+
+ALTER ROLE dba_inmobiliaria ENCRYPTED PASSWORD 'md5551533c5fe296ab67fc92527b7ebecfc';
+
        
 --1º Abro la consola de comandos de windows --> ejecuto cmd
 --2º Me posiciono en la carpeta que tiene los ejecutables de postgres

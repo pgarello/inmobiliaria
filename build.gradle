@@ -108,7 +108,10 @@ task deploy (dependsOn: war){
     }
 }
 
-task deployToLocal (dependsOn: war) {   
+task deployToLocal {   
+	dependsOn 'clean'
+	dependsOn 'war'
+		
 	println "Starting Cargo"
     cargo {
 	    containerId = 'tomcat9x'
