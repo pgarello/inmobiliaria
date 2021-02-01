@@ -3,7 +3,6 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-    
 sourceCompatibility = 1.8
 targetCompatibility = 1.8 
 
@@ -13,7 +12,23 @@ tasks.withType(JavaCompile) {
     options.encoding = 'ISO-8859-1'
 }
 
-version = version
+//version = version
+version='1.0.37'  //version we need to change
+
+task incrementrevsion{
+        def v = version
+        println v
+        String minor=v.substring(v.lastIndexOf('.')+1) //get last digit
+        int m=minor.toInteger()+1                      //increment
+        println m
+        String major=v.substring(0,v.lastIndexOf("."));       //get the beginning
+        println major
+        String s=buildFile.getText().replaceFirst("version='$version'","version='"+major+ "." +m+"'")
+        //println s
+        buildFile.setText(s) //replace the build file's text
+}
+
+
 
 repositories {
 	/*maven {
@@ -64,7 +79,7 @@ dependencies {
         compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.7.1'
         //compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '3.7.3'
 		
-		// Esta librerí­a está en JASPER como opcional
+		// Esta librerï¿½a estï¿½ en JASPER como opcional
 		compile group: 'org.apache.poi', name: 'poi', version: '3.15' // https://mvnrepository.com/artifact/org.apache.poi/poi
         
         // https://mvnrepository.com/artifact/com.lowagie/itext
@@ -96,8 +111,11 @@ war {
     archiveName ='InmobiliariaApp.war'
     //webInf { from 'WebRoot/WEB-INF' }
     //webXml = file('WebRoot/WEB-INF/web.xml')
+    manifest {
+           attributes('Version': rootProject.version)
+           attributes('Fecha': new Date().format("yyyy-MM-dd HH:mm:ssZ"))
+    }
 }
-
 
 task deploy (dependsOn: war){
     
@@ -112,7 +130,7 @@ task deployToLocal {
 	dependsOn 'clean'
 	dependsOn 'war'
 		
-	println "Starting Cargo"
+	println "Starting Cargo " + version
     cargo {
 	    containerId = 'tomcat9x'
 	    port = 8085
@@ -136,5 +154,3 @@ task deployToLocal {
 	}
 
 }
-    
-
