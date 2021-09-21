@@ -14,7 +14,8 @@ import app.beans.NovedadTipo;
 import datos.SessionFactory;
 import datos.contrato.Contrato;
 import datos.contrato.ContratoNovedadDTO;
-
+import datos.contrato_novedad_cobro.ContratoNovedadCobro;
+import datos.contrato_novedad_cobro.ContratoNovedadCobroDAO;
 import datos.persona.Persona;
 
 import datos.recibo_pago_item.ReciboPagoItem;
@@ -361,6 +362,48 @@ public class ContratoNovedadPagoProcesos {
 		
 		
 	}
+
+	/**
+	 * Actualiza en monto de la cuota del alquiler para pagarle al PROPIETARIO
+	 * la comisión la tengo que volver a calcular
+	 * @param oContrato
+	 * @param cuota_numero
+	 * @param monto_cuota
+	 */
+	public static void actualizarMontoCuota(Contrato oContrato, short cuota_numero, double monto_cuota) {
+		
+		System.out.println("ContratoNovedadPagoProcesos.actualizarMontoCuota: " + oContrato + " / " + cuota_numero);
+		
+		List<ContratoNovedadPago> lNovedadPago = ContratoNovedadPagoDAO.findByContratoCuota(oContrato, cuota_numero);
+		
+		for (ContratoNovedadPago oNovedad : lNovedadPago) {
+			
+			if (oNovedad.getIdNovedadTipo() == NovedadTipo.Alquiler) {
+				oNovedad.setMonto(monto_cuota);				
+				ContratoNovedadPagoDAO.update(oNovedad);
+			}
+			
+			if (oNovedad.getIdNovedadTipo() == NovedadTipo.ComisionAlquiler) {
+				
+				double monto_comision = 0;
+   				if (oContrato.getComisionPropFija() > 0) {
+   					monto_comision = oContrato.getComisionPropFija();
+   				} else if (oContrato.getComisionPropPorc() > 0) {
+   					monto_comision = (monto_cuota * oContrato.getComisionPropPorc()) / 100;
+   				}
+   				
+   				if (monto_comision > 0) {
+	   				
+	   				oNovedad.setMonto(-monto_comision);
+	   				ContratoNovedadPagoDAO.update(oNovedad);
+	   				
+   				}
+								
+			}
+			
+		} // Fin for
+				
+	} // Fin metodo 
 	
 	
 } //  Fin clase

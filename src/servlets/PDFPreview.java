@@ -98,7 +98,7 @@ public class PDFPreview extends HttpServlet {
         JRResultSetDataSource oDS2 = null; // lo uso con un RecordSet
 		String reporte_nombre = "";
         
-        if (reporte.equals("comprobanteReciboCobro")) {
+        if (reporte.equals("comprobanteReciboCobro") || reporte.equals("comprobanteReciboCobro2")) {
         
         	// Busco el objeto a imprimir
         	String id_recibo_cobro = request.getParameter("id_recibo_cobro");
@@ -132,8 +132,19 @@ public class PDFPreview extends HttpServlet {
         	
         	parameters.put("monto_letras", "Son pesos " + Utiles.getNumberToString(oRecibo.getTotal()));
         	
-        	reportFile = new File(getServletContext().getRealPath("/reportes/comprobante_cobro.jasper"));
-            // Long cobradorID = new Long(request.getParameter("cobradorID"));
+        	if (reporte.equals("comprobanteReciboCobro") )
+        		reportFile = new File(getServletContext().getRealPath("/reportes/comprobante_cobro.jasper"));
+        	
+        	else {
+        		
+        		String path = request.getServletContext().getRealPath("/imagenes/Logo.jpg");
+        		InputStream imgInputStream = new FileInputStream (path);
+        		parameters.put("logo", imgInputStream);
+        		
+        		reportFile = new File(getServletContext().getRealPath("/reportes/comprobante_cobro2.jasper"));
+        	}
+
+        	// Long cobradorID = new Long(request.getParameter("cobradorID"));
             //jasperDataSource = new JRDataSourceComprobanteEntregaRecibos(cobradorID);
 
 /********************************************************************************************************************/

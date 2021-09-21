@@ -1,0 +1,19 @@
+pgarello > ssh acuarioinmobiliaria.duckdns.org
+
+pgarello > sudo su -
+
+root > su - postgres
+
+postgres > pg_dump -U dba_inmobiliaria -W -h localhost inmobiliaria > /tmp/julio19072021.backup
+
+
+Desde la máquina local
+----------------------
+pgarello@u301a41:~/Documentos/Inmobiliaria$ scp acuarioinmobiliaria.duckdns.org:/tmp/julio19072021.backup .
+
+
+su - postgres
+
+psql
+>DROP DATABASE inmobiliaria;
+>

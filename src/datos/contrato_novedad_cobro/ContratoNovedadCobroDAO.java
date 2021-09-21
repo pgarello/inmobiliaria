@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
 import app.beans.NovedadTipo;
@@ -70,6 +70,55 @@ public class ContratoNovedadCobroDAO extends BaseHibernateDAO {
 		}
 	}
 
+
+	
+	public static void update(ContratoNovedadCobro detachedInstance) {
+		log.debug("merging ContratoNovedadCobro instance");
+		Session oSessionH = SessionFactory.currentSession();
+		Transaction tx = oSessionH.beginTransaction();
+		try {
+			oSessionH.update(detachedInstance);
+			tx.commit();
+			log.debug("merge successful");
+		} catch (RuntimeException re) {
+			tx.rollback();
+			log.error("merge failed", re);
+			throw re;
+		} finally {
+			oSessionH.close();
+		}
+	}
+
+	
+	public void attachDirty(ContratoNovedadCobro instance) {
+		log.debug("attaching dirty ContratoNovedadCobro instance");
+		try {
+			getSession().saveOrUpdate(instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(ContratoNovedadCobro instance) {
+		log.debug("attaching clean ContratoNovedadCobro instance");
+		try {
+			getSession().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	
+	
+	
+/*********************************************************************
+ * METODOS DE BUSQUEDA 
+ ******************************************************************* */
+	
 	public ContratoNovedadCobro findById(java.lang.Integer id) {
 		log.debug("getting ContratoNovedadCobro instance with id: " + id);
 		try {
@@ -100,7 +149,7 @@ public class ContratoNovedadCobroDAO extends BaseHibernateDAO {
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding ContratoNovedadCobro instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from ContratoNovedadCobro as model where model." + propertyName + "= ? order by contratoCuota";
+			String queryString = "from ContratoNovedadCobro as model where model." + propertyName + "= ? order by model.contratoCuota";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
@@ -140,40 +189,7 @@ public class ContratoNovedadCobroDAO extends BaseHibernateDAO {
 	
 	
 
-	public ContratoNovedadCobro merge(ContratoNovedadCobro detachedInstance) {
-		log.debug("merging ContratoNovedadCobro instance");
-		try {
-			ContratoNovedadCobro result = (ContratoNovedadCobro) getSession().merge(detachedInstance);
-			log.debug("merge successful");
-			return result;
-		} catch (RuntimeException re) {
-			log.error("merge failed", re);
-			throw re;
-		}
-	}
-
-	public void attachDirty(ContratoNovedadCobro instance) {
-		log.debug("attaching dirty ContratoNovedadCobro instance");
-		try {
-			getSession().saveOrUpdate(instance);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public void attachClean(ContratoNovedadCobro instance) {
-		log.debug("attaching clean ContratoNovedadCobro instance");
-		try {
-			getSession().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-	
+		
 	
 // METODOS PERSONALIZADOS ----------------------------------------------------------------
 	
@@ -215,7 +231,7 @@ public class ContratoNovedadCobroDAO extends BaseHibernateDAO {
 	@SuppressWarnings("unchecked")
 	public static List<ContratoNovedadCobro> findByContrato(Contrato oContrato) {
 		
-		log.debug("ContratoNovedadCobroDAO.findByContrato");
+		log.debug("ContratoNovedadCobroDAO.findByContrato " + oContrato);
 		
 		Session oSessionH = SessionFactory.currentSession();
 
@@ -247,6 +263,43 @@ public class ContratoNovedadCobroDAO extends BaseHibernateDAO {
 		return lNovedades;
 	}
 
+
+	@SuppressWarnings("unchecked")
+	public static List<ContratoNovedadCobro> findByContratoCuota(Contrato oContrato, Short cuota, Short idNovedadTipo) {
+		
+		log.debug("ContratoNovedadCobroDAO.findByContratoCuota " + oContrato);
+		
+		Session oSessionH = SessionFactory.currentSession();
+
+		List<ContratoNovedadCobro> lNovedades = null;
+				
+		try {
+			String queryString = 	"FROM ContratoNovedadCobro AS model " +
+									"WHERE model.contrato = ? " +
+									"AND model.contratoCuota = ? ";
+			
+			if (idNovedadTipo != null) 
+				queryString += "AND model.idNovedadTipo = " + idNovedadTipo;
+			
+			Query queryObject = oSessionH.createQuery(queryString);
+			
+			queryObject.setParameter(0, oContrato);
+			queryObject.setParameter(1, cuota);
+			
+			lNovedades = queryObject.list();
+			
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		} finally {
+			oSessionH.close();
+		}		
+		
+		return lNovedades;
+	}
+
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public static List<ContratoNovedadCobro> findByPeriodo(short mes, short anio) {

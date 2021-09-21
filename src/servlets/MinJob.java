@@ -1,5 +1,6 @@
 package servlets;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import resources.Configuracion;
@@ -12,9 +13,9 @@ public void run() {
 	Calendar oFecha = Calendar.getInstance();
     
 	int minuto = 25;
-	
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	System.out.println(
-			oFecha.getTime().toLocaleString() + 
+			sdf.format(oFecha.getTime()) + 
 			" MinJob trigged by scheduler - " + minuto );
 	
 	try {
@@ -22,9 +23,10 @@ public void run() {
 	} catch(Exception e) {
 		e.printStackTrace();
 	}
-	
-	if (oFecha.get(Calendar.MINUTE) == minuto)	
-		HourlyJob.realizarBackup();
+
+// Por ahora hago el backup en función de la HORA	
+//	if (oFecha.get(Calendar.MINUTE) == minuto)	
+//		HourlyJob.realizarBackup();
     
   }
 }

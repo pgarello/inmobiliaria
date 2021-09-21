@@ -2,8 +2,15 @@ package app.abms.contrato;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
+import org.jfree.util.Log;
+
+import app.beans.Cuota;
+import app.beans.Utiles;
 import ccecho2.base.CCButton;
 import ccecho2.base.CCCheckBox;
 import ccecho2.base.CCColumn;
@@ -17,12 +24,15 @@ import ccecho2.complex.MessageWindowPane;
 //import ccecho2.complex.MessageWindowPane;
 
 import echopointng.Separator;
-
+import framework.ui.generales.FWWindowPaneMensajes;
 import framework.ui.generales.abms.ABMListadoEditViewExit;
+import framework.ui.generales.exception.ReglasDeNegocioException;
+import framework.ui.generales.exception.ValidacionException;
 import framework.ui.principal.FWContentPanePrincipal;
 
 import datos.contrato.Contrato;
 import datos.contrato.ContratoFacade;
+import datos.contrato.ContratoProcesos;
 import datos.contrato_actor.ContratoActor;
 
 import nextapp.echo2.app.Alignment;
@@ -38,7 +48,7 @@ import nextapp.echo2.app.ResourceImageReference;
 import nextapp.echo2.app.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class ContratoListadoEditView extends ABMListadoEditViewExit {
+public class ContratoListadoEditView extends ABMListadoEditViewExit implements iContratoCuotas {
     
     // Imagen del botón para ver la Cuenta Corriente
     private ImageReference CtaCte = new ResourceImageReference("/resources/crystalsvg22x22/actions/view_text.png");
@@ -47,15 +57,39 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
     private ImageReference iPropietario = new ResourceImageReference("/resources/crystalsvg22x22/actions/kontact_contacts.png");
     private CCButton btnPropietario;
     
+    private ImageReference iCuotas = new ResourceImageReference("/resources/crystalsvg22x22/actions/math_matrix.png");
+    private CCButton btnCuotas;
+    private List<Cuota> vCuotas = new Vector<Cuota>();
+
+    
     // Botón Cuenta Corriente
     private CCButton btnCtaCte;
     private CCButton btnCtaCte2;
     
 	private ContratoListadoView listado;
-	private Contrato oContrato;
-
+	private Contrato oContrato;	
+	
+	private CCColumn c1Principal, cLabels, cTexts;
+	private CCRow rPrincipal, rMensaje, rCuotas;
+	
+	private CCLabel lMensaje;
+	private CCLabel lInmueble, lPropietario, lInquilino, lObservaciones, lFecha_desde, lFecha_hasta, lMonto, lFecha_rescision,
+					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, lComercial;
+	
+	private CCTextField tInmueble, tPropietario, tInquilino, tMonto, tMonto2, tCuotas, tComision_prop_fija, 
+						tComision_prop_porc, tComision_inquilino;
+	
+	CCDateField dfFecha_desde, dfFecha_hasta, dfFecha_rescision;
+	
+	private CCCheckBox chComercial;
+	
+	private CCTextArea tObservaciones;
+	private CCRow rPropietario;
+	
+	
 	/**
 	 * Falta la MODIFICACION -- por ahora solo modificamos las observaciones del contrato
+	 * 							Se agrega la MODIFICACION de las cuotas de un contrato 08/2021
 	 * Falta el BORRADO 
 	 */
 	
@@ -81,24 +115,8 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
 		renderObjetos();
 		
 	}
+
 	
-	
-	private CCColumn c1Principal, cLabels, cTexts;
-	private CCRow rPrincipal, rMensaje;
-	
-	private CCLabel lMensaje;
-	private CCLabel lInmueble, lPropietario, lInquilino, lObservaciones, lFecha_desde, lFecha_hasta, lMonto, lFecha_rescision,
-					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, lComercial;
-	
-	private CCTextField tInmueble, tPropietario, tInquilino, tMonto, tCuotas, tComision_prop_fija, 
-						tComision_prop_porc, tComision_inquilino;
-	
-	CCDateField dfFecha_desde, dfFecha_hasta, dfFecha_rescision;
-	
-	private CCCheckBox chComercial;
-	
-	private CCTextArea tObservaciones;
-	private CCRow rPropietario;
 	
     private void crearObjetos() {
     	
@@ -109,6 +127,8 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
         c1Principal.setInsets(new Insets(10));
         rPrincipal = new CCRow();
 
+        rCuotas = new CCRow(22);
+        
         rMensaje = new CCRow();
         rMensaje.setAlignment(Alignment.ALIGN_CENTER);
         
@@ -140,6 +160,17 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
         this.btnPropietario.setInsets(new Insets(10, 0));        
         this.btnPropietario.addActionListener(this);        
 
+        
+        /* Configuro el boton de Cuotas */
+        btnCuotas = new CCButton(iCuotas);
+        this.btnCuotas.setActionCommand("cuotas");
+        this.btnCuotas.setToolTipText("Personalizar cuotas mensuales");
+        
+        this.btnCuotas.setStyleName(null);
+        this.btnCuotas.setInsets(new Insets(10, 0));        
+        this.btnCuotas.addActionListener(this);        
+        
+        
         /*******************************************************************/
         lInmueble = new CCLabel("Inmueble:",22);
         tInmueble = new CCTextField(300,22,20,false);
@@ -172,11 +203,17 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
         tMonto.setEnabled(false);
         
         lCuotas = new CCLabel("Cant. de Cuotas:",22);
-        tCuotas = new CCTextField(50,22,20,true);
+        //tCuotas = new CCTextField(50,22,20,true);
+        tCuotas = new CCTextField(50,true);
         tCuotas.setText("0");
         tCuotas.setRegex("^[0-9]{1,2}$");
         //tCuotas.setRegex("^[0-9]*$"); // Cantidad ilimitada de digitos
         tCuotas.setEnabled(false);
+        
+        tMonto2 = new CCTextField(100,true);
+        tMonto2.setText("0,00");
+        tMonto2.setRegex("^(-)?(\\d){1,3}(\\.(\\d){3})*(,\\d{1,2})?$");
+        tMonto2.setEnabled(false);
         
         lComercial = new CCLabel("Contrato COMERCIAL",22);
         chComercial = new CCCheckBox("", 22);
@@ -246,6 +283,11 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
         rPropietario.add(tPropietario);
         rPropietario.add(btnPropietario);
         
+        rCuotas.add(tCuotas);
+        rCuotas.add(btnCuotas);
+        rCuotas.add(new Separator());
+        rCuotas.add(tMonto2);
+        
         /*
         RowLayoutData cLabelLayoutData = new RowLayoutData();
         cLabelLayoutData.setAlignment(new Alignment(Alignment.LEFT,Alignment.CENTER));
@@ -279,7 +321,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
         cTexts.add(dfFecha_hasta);
         cTexts.add(dfFecha_rescision);
         cTexts.add(tMonto);
-        cTexts.add(tCuotas);
+        cTexts.add(rCuotas);
         cTexts.add(chComercial);
         
         cTexts.add(lVacio);
@@ -314,13 +356,16 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
 		dfFecha_hasta.getTextField().setText(sdf.format(oContrato.getFechaHasta()));
 		
 		try {
-			System.out.println("viene la fecha: " + oContrato.getFechaRescision() + "-" + oContrato.getIdContrato());
+			//System.out.println("viene la fecha: " + oContrato.getFechaRescision() + "-" + oContrato.getIdContrato());
 			dfFecha_rescision.getTextField().setText(sdf.format(oContrato.getFechaRescision()));
 		} catch(NullPointerException npe) {
 			dfFecha_rescision.getTextField().setText("");
 		}
 		
 		tMonto.setText(moneda.format(oContrato.getMonto()));
+		
+		tMonto2.setText(moneda.format(oContrato.getMontoCuotas()));
+		
 		tCuotas.setText(""+oContrato.getCantidadCuota());
 		chComercial.setSelected(oContrato.getComercial());
 		
@@ -348,7 +393,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
     		
 	    	// Actualizo la tabla
 	        listado.ActualizarDatos(false);
-	    		
+	    		        
 	    } catch(Exception e) {
 	    	e.printStackTrace();
 	    	salida = false;
@@ -383,11 +428,79 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit {
     		((FWContentPanePrincipal) ApplicationInstance
         			.getActive().getDefaultWindow().getContent())
         			.abrirVentana(new ContratoPropietarios(oContrato));
-        }
+        
+        } else if (ae.getActionCommand().equals("cuotas")) {
+    		
+    		// System.out.println("Boton Cuotas");
+    		    		
+    		short cant_cuotas = Short.valueOf(tCuotas.getText());    		
+    		double monto_total = (double) Utiles.ParseFloat(tMonto.getText());
+    		Date fecha_desde = dfFecha_desde.getSelectedDate().getTime();
+    		
+    		/* Tengo que armar los datos de las cuotas */
+    		if (vCuotas.isEmpty()) { 
+    			this.vCuotas = oContrato.getCuotas();
+    		}
+    		
+    		List<Cuota> dataList = this.vCuotas;
+    		
+    		((FWContentPanePrincipal) ApplicationInstance
+        			.getActive().getDefaultWindow().getContent())
+        			.abrirVentana(new ContratoAddCuotasListadoView(cant_cuotas, monto_total, fecha_desde, dataList, this));
+    		
+    		
+    	}
     	
     	// Tiro el evento para arriba en la gerarquia de objetos
     	super.actionPerformed(ae);
     	
     }
+
+
+
+	@Override
+	public void procesarCuotas(List<Cuota> lCuotas) {
+		
+		/* 
+		 * Recibo el listado de cuotas modificado, tengo que grabar los cambios y actualizar los datos de pantalla
+		 * como el total del contrato 
+		 */
+		
+		/** 
+		 * OJO !!! no se donde aplico las reglas de negocio antes de grabar
+		 * - No se puede modificar si ya se cobro o pagó esa cuota
+		 * - Se podría chequear que no esté vencida también
+		 * - ¿ Chequeo que el valor siempre sea superior ? 
+		 */
+		
+		// Inserto
+    	try {
+    		ContratoProcesos.actualizarCuotasContrato(oContrato, lCuotas);
+    		
+    		// Actualizo el monto del total del contrato con los nuevos valores de las cuotas
+    		
+    		
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		
+    		if (e instanceof ReglasDeNegocioException) {
+    			
+    			// Tengo que mostrar el mensaje de error
+    			new FWWindowPaneMensajes(e.getMessage(), "ERROR de proceso");
+    			//throw new ValidacionException(e.getMessage(), e);
+    		}
+    		
+    	}
+		
+    	// Reinicio la colección de cuotas para que la próxima vez se actualice
+    	oContrato.limpiarListaCuotas();
+    	this.vCuotas = new Vector<Cuota>();
+    	
+    	// El contrato queda con el total original !!!
+    	DecimalFormat moneda = new DecimalFormat("###,##0.00");
+    	Log.debug("Datos del contrato: " + moneda.format(oContrato.getMontoCuotas()));        
+        tMonto2.setText(moneda.format(oContrato.getMontoCuotas()));
+
+	}
 
 }

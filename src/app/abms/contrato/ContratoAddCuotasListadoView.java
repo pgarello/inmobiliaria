@@ -50,13 +50,13 @@ public class ContratoAddCuotasListadoView extends ABMListadoView implements Tabl
     private ImageReference iEdit = new ResourceImageReference("/resources/crystalsvg22x22/actions/edit.png");
     private CCButton btnEditItem;
     
-    private ContratoAddView refClase;
+    private iContratoCuotas refClase;
     
     // Dejo accesible el atributo desde el paquete
     ContratoCuotaModel oModel = new ContratoCuotaModel();
     private FWContentPanePrincipal CPPrincipal;
 	
-    public ContratoAddCuotasListadoView (short cant_cuotas, double monto_total, Date fecha_desde, List<Cuota> dataListAUX, ContratoAddView refClase) {
+    public ContratoAddCuotasListadoView (short cant_cuotas, double monto_total, Date fecha_desde, List<Cuota> dataListAUX, iContratoCuotas refClase) {
     	
         super(null, true);
         

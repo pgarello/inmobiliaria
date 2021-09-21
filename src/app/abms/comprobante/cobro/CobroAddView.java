@@ -6,6 +6,8 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import app.beans.NovedadTipo;
 import app.beans.Utiles;
@@ -91,10 +93,12 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
 
     private ImageReference iPrint = new ResourceImageReference("/resources/crystalsvg22x22/actions/fileprint.png");
     private CCButton btnPrint;
-    protected CCRow rBotones_barra;
+    
+    private ImageReference iPrint2 = new ResourceImageReference("/resources/crystalsvg22x22/actions/filequickprint.png");
+    private CCButton btnPrint2;
 
     
-    
+    protected CCRow rBotones_barra;    
     
     private CCColumn _cPrincipal, cLabels, cTexts;
 	private CCRow rPrincipal, rMensaje, rInquilino, rInmueble, rItems, rTotales;
@@ -240,6 +244,11 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
         btnPrint.setToolTipText("Imprimir comprobante");
         btnPrint.addActionListener(this);
         //btnPrint.setEnabled(false);
+        
+        btnPrint2 = new CCButton(iPrint2);
+        btnPrint2.setActionCommand("imprimir2");
+        btnPrint2.setToolTipText("Imprimir comprobante PDF");
+        btnPrint2.addActionListener(this);
         
         /*******************************************************************/
         lReciboNumero = new CCLabel("Número:",22);
@@ -440,6 +449,7 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
 	    	/* ---------------------------------------------- */     
 	        this.rBotones.add(new Separator());
 	        this.rBotones.add(btnPrint);
+	        this.rBotones.add(btnPrint2);
 	        
 	        btnBajaItem.setActionCommand("");
 	        btnBajaItem.setToolTipText("Boton deshabilitado");
@@ -468,6 +478,8 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
     
     
     public void actionPerformed(ActionEvent ae) {
+    	
+    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "CobroAddView.actionPerformed : " + ae.getActionCommand());    	    	
     	
     	if (ae.getActionCommand().equals("inquilino")){
     		
@@ -536,6 +548,11 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
     		
     		// Aca lanzo la impresión
     		doPrint();
+    	
+    	} else if (ae.getActionCommand().equals("imprimir2")){
+    		
+    		// Aca lanzo la impresión
+    		doPrint2();
     		
     	}
     	
@@ -751,5 +768,20 @@ public class CobroAddView extends ABMAddView implements FWBusquedas {
         ApplicationInstance.getActive().enqueueCommand(oComm);
     }
 
+    
+    public void doPrint2() {
+    	
+        String sUri = "PDFPreview?reporte=comprobanteReciboCobro2&id_recibo_cobro=" + this.oReciboCobro.getIdReciboCobro();
+
+        StringBuilder sb = new StringBuilder()
+                .append("width=640")
+                .append(",height=480")
+                .append(",resizable=yes")
+                .append(",scrollbars=yes");
+
+        Command oComm = new BrowserOpenWindowCommand(sUri, "Prueba", sb.toString());
+        ApplicationInstance.getActive().enqueueCommand(oComm);
+    }
+    
        
 }

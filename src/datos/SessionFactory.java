@@ -64,7 +64,7 @@ public class SessionFactory {
     
     public static Session currentSession() throws HibernateException {
     	
-    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "SessionFactory.currentSession");
+    	//Logger.getLogger("Inmobiliaria").log(Level.INFO, "SessionFactory.currentSession");
     	
     	Session session = (Session) threadLocal.get();    	    	    	
     	if (session != null && !session.isOpen()) session = null;

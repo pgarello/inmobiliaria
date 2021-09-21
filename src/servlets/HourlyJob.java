@@ -1,7 +1,10 @@
 package servlets;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import resources.Configuracion;
 
@@ -17,8 +20,9 @@ public class HourlyJob implements Runnable {
 	    
 	    /** 1º Realizo el backup de la base de datos */
 	    int horaBACKUP = 10;
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	    if (oFecha.get(Calendar.HOUR_OF_DAY) == horaBACKUP)	    
-	    	realizarBackup();
+	    	realizarBackup(sdf.format(oFecha.getTime()));
 	    
 	}
 
@@ -26,10 +30,10 @@ public class HourlyJob implements Runnable {
 	 * Realiza el backup de la base de datos
 	 * @return true si el proceso se realiza con éxito
 	 */
-	public static boolean realizarBackup() {
+	public static boolean realizarBackup(String fecha) {
 		String username = "dba_inmobiliaria";
 		String database = "inmobiliaria";
-		String file = System.getProperty("catalina.base") + "/temp/" + database + ".sql";
+		String file = System.getProperty("catalina.base") + "/temp/" + database+ fecha + ".sql";
 		//String file = "/tmp/" + database + ".sql";
 		String password = "dba"; // dba en MD5
 		
@@ -39,7 +43,8 @@ public class HourlyJob implements Runnable {
 		int success=-1;
 		try {
 			Runtime.getRuntime();
-			ProcessBuilder pb = new ProcessBuilder(path + "pg_dump", "-U", username, "-v", "-f", file, database);
+			//ProcessBuilder pb = new ProcessBuilder(path + "pg_dump", "-U", username, "-v", "-f", file, database);
+			ProcessBuilder pb = new ProcessBuilder(path + "pg_dump", "-U", username, "-W", "-h localhost", database, " > ", file);
 			pb.environment().put("PGPASSWORD", password);
 			pb.redirectErrorStream(true);
 			
@@ -47,13 +52,18 @@ public class HourlyJob implements Runnable {
 			success = runtimeProcess.waitFor();
 			
 			if (runtimeProcess.exitValue() != 0) {
-				System.out.println("Backup ERROR");
+				//System.out.println("Backup ERROR");
+				Logger.getLogger("Inmobiliaria").log(Level.SEVERE, "Backup ERROR runtimeProcess.exitValue():" + runtimeProcess.exitValue());
 				InputStream errorStream = runtimeProcess.getErrorStream();
 			    int c = 0;
 			    while ((c = errorStream.read()) != -1) {
-			    	System.out.print((char)c);
+			    	//System.out.print((char)c);
+			    	Logger.getLogger("Inmobiliaria").log(Level.SEVERE, String.valueOf((char)c) );	
 			    }
-			} else System.out.println("Backup CORRECTO!!!!"); 
+			} else {
+				//System.out.println("Backup CORRECTO!!!!");
+				Logger.getLogger("Inmobiliaria").log(Level.SEVERE, "Backup CORRECTO!!!!");
+			}
 		    
 		    
 		    System.out.println("--------------------------------------------");

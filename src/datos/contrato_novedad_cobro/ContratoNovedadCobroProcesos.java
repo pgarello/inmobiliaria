@@ -63,6 +63,7 @@ public class ContratoNovedadCobroProcesos {
 			
 			if (procesar) {
 				oNovedad = completarConSaldo(oNovedad);
+				completarConPagado(oNovedad);
 				if (con_saldo) {
 					if (oNovedad.getSaldo() > 0) {
 						// Con deuda
@@ -379,5 +380,25 @@ public class ContratoNovedadCobroProcesos {
 		ContratoNovedadCobroDAO.save(oNovedadCobro);
 		
 	} // Fin grabarNovedad
+	
+	/**
+	 * Actualiza el valor de una cuota del alquiler para el INQUILINO
+	 * @param oContrato
+	 * @param contrato_cuota
+	 * @param monto
+	 */
+	public static void actualizarMontoCuota(Contrato oContrato, short contrato_cuota, double monto) {
+		
+		System.out.println("ContratoNovedadCobroProcesos.actualizarMontoCuota: " + oContrato + " / " + contrato_cuota);
+		
+		List<ContratoNovedadCobro> lContratoNovedadCobro = ContratoNovedadCobroDAO.findByContratoCuota(oContrato, contrato_cuota, NovedadTipo.Alquiler);
+		
+		ContratoNovedadCobro oNovedadCobro = lContratoNovedadCobro.get(0);
+		oNovedadCobro.setMonto(monto);
+		
+		ContratoNovedadCobroDAO.update(oNovedadCobro);
+		
+	}
+	
 	
 } //  Fin clase

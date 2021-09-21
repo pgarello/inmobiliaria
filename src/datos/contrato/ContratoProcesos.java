@@ -217,8 +217,90 @@ public class ContratoProcesos {
 	}
 	
 	
+	/**
+	 * Actualiza las cuotas de un CONTRATO, a partir del 2021 los contratos se actualizan según un porcentaje
+	 * @param oContrato
+	 * @param vCuotas
+	 * @throws ReglasDeNegocioException
+	 */
+	public static void actualizarCuotasContrato(Contrato oContrato, List<Cuota> vCuotas) throws ReglasDeNegocioException {
+		
+		System.out.println("ContratoProcess.actualizarCuotasContrato " + oContrato);
+		
+		// Debería chequear que el contrato no esté vencido !!!
+		Calendar hoy = Calendar.getInstance();
+		if (oContrato.getFechaHasta().before(hoy.getTime()) ) {
+			//System.out.println("ContratoProcess.actualizarCuotasContrato fechaHasta:" + oContrato.getFechaHasta().toLocaleString() + "//" + hoy.getTime().toLocaleString());
+			if (oContrato.getFechaExtension() != null) {
+				if (oContrato.getFechaExtension().before(hoy.getTime()) ) {
+					// Error
+					throw new ReglasDeNegocioException("A un contrato VENCIDO/EXTENDIDO no se le puede modificar las cuotas");
+				}
+			} else {
+				// Error
+				throw new ReglasDeNegocioException("A un contrato VENCIDO no se le puede modificar las cuotas");
+			}
+		}
+		
+		if (oContrato.getFechaRescision() != null)
+			if (oContrato.getFechaRescision().before(hoy.getTime()) ) {
+				// Error
+				throw new ReglasDeNegocioException("A un contrato RESCINDIDO no se le puede modificar las cuotas");			
+			}
+		
+		// Reseteo la colección para que busque en la base de datos nuevamente
+		oContrato.limpiarListaCuotas();
+		
+		// Pasé reglas de negocio
+		for (Cuota oCuota: vCuotas) {
+			
+			/* Tengo que recorrer todas las cuotas y evaluar el monto si se modificó, en ese caso chequear las 
+			 * reglas de negocio y si se cumplen modificar el monto de la cuota */						
+			
+			short cuota_numero = oCuota.getCuota();
+			double monto_cuota = oCuota.getValor();									
+			
+			/* Busco la cuota en el contrato, debo saber si está paga 
+			 * NO ES OPTIMO, RECORRE LA COLECCIÓN POR CADA UNA DE LAS CUOTAS */
+			Cuota oCuotaContrato = oContrato.getCuotaxNumero(cuota_numero);
+						
+//			System.out.println("ContratoProcess.actualizarCuotasContrato cuota_numero:" + cuota_numero);
+//			System.out.println("ContratoProcess.actualizarCuotasContrato monto_cuota:" + monto_cuota);
+//			System.out.println("ContratoProcess.actualizarCuotasContrato oCuotaContrato.getValor():" + oCuotaContrato.getValor());
+//			System.out.println("ContratoProcess.actualizarCuotasContrato oCuotaContrato.getSaldo():" + oCuotaContrato.getSaldo());
+//			System.out.println("ContratoProcess.actualizarCuotasContrato oCuotaContrato.getPagado():" + oCuotaContrato.getPagado());
+			
+			if (oCuotaContrato.getValor() != monto_cuota) {
+				
+				// valido que no se haya cobrado y tampoco pagado
+//				System.out.println("******************************************************");
+//				System.out.println("ContratoProcess.actualizarCuotasContrato MODIFICAR cuota_numero:" + cuota_numero);
+//				System.out.println("******************************************************");
+				
+				// Si el SALDO != MONTO CUOTA => se cobró algo
+				// Si PAGADO es != 0 => ya se pagó algo al propietario
+				if ( oCuotaContrato.yaSeCobroAlgoINQUILINO()|| oCuotaContrato.yaSePagoAlgoPROPIETARIO() ) {
+					System.out.println("ContratoProcess.actualizarCuotasContrato yaSePagoAlgoPROPIETARIO:" + cuota_numero);
+					throw new ReglasDeNegocioException("Se modificaron CUOTAS ya cobradas y/o ya pagadas");	
+				}
+
+				// grabo
+				// Tengo que grabar en:
+				// ContratoNovedadCobroProcesos
+				// ContratoNovedadPagoProcesos
+				ContratoNovedadCobroProcesos.actualizarMontoCuota(oContrato, cuota_numero, monto_cuota);
+				ContratoNovedadPagoProcesos.actualizarMontoCuota(oContrato, cuota_numero, monto_cuota);
+			}
+			
+		} // Fin for
+		
+	}
 	
-	// Tiene que grabar en todas las tablas relacionadas	
+	
+	/**
+	 * Es el alta de un contrato
+	 * Tiene que grabar en todas las tablas relacionadas
+	 */	
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static void save(Contrato oContrato, Persona oInquilino, List<Cuota> vCuotas) throws ReglasDeNegocioException {
 		
@@ -460,6 +542,9 @@ public class ContratoProcesos {
 		}
 				
 	}
+	
+	
+	
 	
 	
 	public static void rescindirContrato(Contrato oContrato, float monto, Date fecha) throws ReglasDeNegocioException {

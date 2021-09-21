@@ -99,8 +99,12 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
 
     private ImageReference iPrint = new ResourceImageReference("/resources/crystalsvg22x22/actions/fileprint.png");
     private CCButton btnPrint;
+    
+    private ImageReference iPrint2 = new ResourceImageReference("/resources/crystalsvg22x22/actions/filequickprint.png");
+    private CCButton btnPrint2;
+    
     protected CCRow rBotones_barra;
-
+    
     private CCButton btnFiltrar;
     
     
@@ -285,8 +289,14 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
         btnPrint = new CCButton(iPrint);
         btnPrint.setActionCommand("imprimir");
         btnPrint.setToolTipText("Imprimir comprobante");
-        btnPrint.addActionListener(this);
+        btnPrint.addActionListener(this);        
         //btnPrint.setEnabled(false);
+
+        btnPrint2 = new CCButton(iPrint2);
+        btnPrint2.setActionCommand("imprimir2");
+        btnPrint2.setToolTipText("Imprimir comprobante PDF");
+        btnPrint2.addActionListener(this);        
+
         
         /*******************************************************************/
         lReciboNumero = new CCLabel("Número:",22);
@@ -543,6 +553,7 @@ public class PagoAddView extends ABMAddView implements FWBusquedas {
     	//this.btnPrint.setEnabled(true);
         this.rBotones.add(new Separator());
         this.rBotones.add(btnPrint);
+        this.rBotones.add(btnPrint2);
     	
     	
     }

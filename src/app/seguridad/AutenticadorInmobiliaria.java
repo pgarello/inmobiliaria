@@ -7,6 +7,9 @@
 
 package app.seguridad;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import datos.usuario.Usuario;
 import datos.usuario.UsuarioFacade;
 import framework.grales.seguridad.FWTarea;
@@ -72,7 +75,8 @@ public class AutenticadorInmobiliaria extends FWAutenticador {
     /** Crea una instancia en base a un usuario y pass -- uso sobrecarga del método*/
     public FWUsuario autenticar(String sUsuario, String sPassword) {
     	
-    	System.out.println("AutenticadorInmobiliaria.autenticar " + sUsuario);
+    	//System.out.println("AutenticadorInmobiliaria.autenticar " + sUsuario);
+    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "AutenticadorInmobiliaria.autenticar " + sUsuario);
     	
     	// Limpio el usuario logueado
     	this.usuario = null;

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_cobro" pageWidth="595" pageHeight="842" columnWidth="533" leftMargin="31" rightMargin="31" topMargin="28" bottomMargin="28" uuid="b9a53ae5-4093-4db9-953d-48376ca12e31">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="196"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="inquilino" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="numero" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="fechaEmision" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="leyenda" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="total" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="domicilio" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="monto_letras" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cuit" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="responsabilidad" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="localidad" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="vencimiento" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<field name="monto" class="java.lang.Double"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="contratoNovedadCobro.contrato.inmueble.direccion_completa" class="java.lang.String"/>
+	<field name="itemTipo" class="java.lang.String"/>
+	<field name="contratoNovedadCobro.periodoCuota" class="java.lang.String"/>
+	<field name="contratoNovedadCobro.contrato.inmueble.localidad.descripcion" class="java.lang.String"/>
+	<field name="contratoNovedadCobro.contrato.fin_contrato" class="java.util.Date"/>
+	<field name="reciboCobro.numero" class="java.lang.Integer"/>
+	<variable name="SUM_monto_1" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="62" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="391" y="39" width="100" height="18" uuid="7ebaa8e9-1105-45c0-909d-5b5efdd1cf91"/>
+				<textFieldExpression><![CDATA[$P{fechaEmision}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="10" y="6" width="50" height="50" uuid="5154d5f3-aaac-406b-99dd-30398d728d10"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="87" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" mode="Opaque" x="58" y="1" width="325" height="15" uuid="19fa56cb-7b7d-4356-ab0c-c2a07fb1e08d"/>
+				<textFieldExpression><![CDATA[$P{inquilino}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="58" y="15" width="220" height="15" uuid="ed9c0f9e-172e-4d62-bb2d-5d94d373a8e3"/>
+				<textFieldExpression><![CDATA[$P{domicilio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="425" y="29" width="100" height="15" uuid="36a6389c-3087-4544-a192-fe8b6f641a52"/>
+				<textFieldExpression><![CDATA[$P{cuit}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="58" y="29" width="220" height="15" uuid="c541f84d-e911-4d2c-b25b-b1dba2912148"/>
+				<textFieldExpression><![CDATA[$P{responsabilidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="84" y="48" width="241" height="18" uuid="ce1f8e12-2a83-45a8-97b2-e54caff8b4c9"/>
+				<textFieldExpression><![CDATA[$F{contratoNovedadCobro.contrato.inmueble.direccion_completa}
++ " - " +
+$F{contratoNovedadCobro.contrato.inmueble.localidad.descripcion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField" x="425" y="48" width="100" height="18" uuid="53841bad-eade-44c5-917d-6d02180f5eb1"/>
+				<textFieldExpression><![CDATA[$F{contratoNovedadCobro.contrato.fin_contrato}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="9" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="0" width="20" height="18" uuid="1694eb16-42cb-4cbc-9f85-b457308c0c30"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="432" y="0" width="93" height="18" uuid="03070a80-bca4-4615-a1ac-0c6414d89522"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="22" y="0" width="325" height="18" uuid="f0120211-20b9-438f-b16c-7ee3594efedd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion} +
+($F{contratoNovedadCobro.periodoCuota}!=null?" - " + $F{contratoNovedadCobro.periodoCuota}:"")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="357" y="0" width="71" height="18" uuid="acc6676f-7599-4d5c-b8f3-904f20aaf09c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemTipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="77" splitType="Stretch">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="11" width="525" height="18" uuid="ad1a427a-c77c-4836-bd30-4165e56d4961"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{leyenda}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="30" width="100" height="18" uuid="4219ce4d-35dc-4b31-8858-5e4030514594"/>
+				<textFieldExpression><![CDATA[$P{numero}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="132" splitType="Stretch">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="false">
+				<reportElement key="textField" x="390" y="86" width="135" height="18" uuid="998ae28e-0900-46fc-9c1f-8cef284cd36c"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="10" width="525" height="18" uuid="504dedf2-7cc9-4a1e-93b7-0a096d19fe87"/>
+				<textFieldExpression><![CDATA[$P{monto_letras}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

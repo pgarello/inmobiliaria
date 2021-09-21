@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 //import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
@@ -117,7 +118,7 @@ public class ContratoNovedadPagoDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "FROM ContratoNovedadPago AS model " +
 								 "WHERE model." + propertyName + "= ? " +
-								 "ORDER BY contratoCuota, idNovedadTipo";
+								 "ORDER BY model.contratoCuota, model.idNovedadTipo";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
 			
@@ -164,16 +165,20 @@ public class ContratoNovedadPagoDAO extends BaseHibernateDAO {
 		}
 	}
 	
-	public ContratoNovedadPago merge(ContratoNovedadPago detachedInstance) {
+	public static void update(ContratoNovedadPago detachedInstance) {
 		log.debug("merging ContratoNovedadPago instance");
+		Session oSessionH = SessionFactory.currentSession();
+		Transaction tx = oSessionH.beginTransaction();		
 		try {
-			ContratoNovedadPago result = (ContratoNovedadPago) getSession()
-					.merge(detachedInstance);
+			oSessionH.update(detachedInstance);
+			tx.commit();
 			log.debug("merge successful");
-			return result;
 		} catch (RuntimeException re) {
+			tx.rollback();
 			log.error("merge failed", re);
 			throw re;
+		} finally {
+			oSessionH.close();
 		}
 	}
 
@@ -230,6 +235,38 @@ public class ContratoNovedadPagoDAO extends BaseHibernateDAO {
 			
 		} catch (RuntimeException re) {
 			log.error("ContratoNovedadPagoDAO.findByPersona failed", re);
+			throw re;
+		} finally {
+			oSessionH.close();
+		}		
+		
+		return lNovedades;
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public static List<ContratoNovedadPago> findByContratoCuota(Contrato oContrato, short cuota_numero) {
+		log.debug("ContratoNovedadPagoDAO.findByContratoCuota " + oContrato + " / " + cuota_numero);
+		
+		Session oSessionH = SessionFactory.currentSession();
+
+		List<ContratoNovedadPago> lNovedades = null;
+		//Date fecha_alta = new Date();
+		
+		try {
+			String queryString = 	"FROM ContratoNovedadPago AS model " +
+									"WHERE model.contrato = ? " +
+									"AND model.contratoCuota = ? ";
+
+			Query queryObject = oSessionH.createQuery(queryString);
+			
+			queryObject.setParameter(0, oContrato);
+			queryObject.setParameter(1, cuota_numero);
+			
+			lNovedades = queryObject.list();
+			
+		} catch (RuntimeException re) {
+			log.error("ContratoNovedadPagoDAO.findByContratoCuota failed", re);
 			throw re;
 		} finally {
 			oSessionH.close();

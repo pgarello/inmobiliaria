@@ -13,7 +13,7 @@ tasks.withType(JavaCompile) {
 }
 
 //version = version
-version='1.0.37'  //version we need to change
+version='1.0.158'  //version we need to change
 
 task incrementrevsion{
         def v = version
@@ -58,14 +58,14 @@ apply plugin: 'com.bmuschko.cargo'
 
 
 dependencies {
-	compile 'javax:javaee-api:8.0'
+	implementation 'javax:javaee-api:8.0'
 	
-	compile 'echopointng:echopointng:2.1.0rc4'
+	implementation 'echopointng:echopointng:2.1.0rc4'
 	
 	
-	compile name:'Echo2_App', ext:'jar'
-	compile name:'Echo2_WebContainer', ext:'jar'
-	compile name:'Echo2_WebRender', ext:'jar'
+	implementation name:'Echo2_App', ext:'jar'
+	implementation name:'Echo2_WebContainer', ext:'jar'
+	implementation name:'Echo2_WebRender', ext:'jar'
 
 	
 	//compile group: 'com.nextapp', name: 'echo2-app', version: '2.1.1'
@@ -76,14 +76,14 @@ dependencies {
 
 	// REPORTES ----------------------------------------------------------------------------------                 		        
         // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports       
-        compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.7.1'
+        implementation group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.7.1'
         //compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '3.7.3'
 		
 		// Esta librer�a est� en JASPER como opcional
-		compile group: 'org.apache.poi', name: 'poi', version: '3.15' // https://mvnrepository.com/artifact/org.apache.poi/poi
+		implementation group: 'org.apache.poi', name: 'poi', version: '3.15' // https://mvnrepository.com/artifact/org.apache.poi/poi
         
         // https://mvnrepository.com/artifact/com.lowagie/itext
-		compile group: 'com.lowagie', name: 'itext', version: '2.1.7'
+		implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
                 
         //por error
 		//The type java.lang.CharSequence cannot be resolved. It is indirectly referenced from required .class files
@@ -92,9 +92,9 @@ dependencies {
     // FIN ----------------------------------------------------------------------------------
 
 	// https://mvnrepository.com/artifact/org.hibernate/hibernate
-	compileOnly group: 'org.hibernate', name: 'hibernate', version: '3.1'
+	implementation group: 'org.hibernate', name: 'hibernate', version: '3.1'
 	
-	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
 
 }
 

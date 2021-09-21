@@ -54,7 +54,7 @@ import framework.ui.generales.exception.ValidacionException;
 import framework.ui.principal.FWContentPanePrincipal;
 
 @SuppressWarnings("serial")
-public class ContratoAddView extends ABMAddView implements FWBusquedas {
+public class ContratoAddView extends ABMAddView implements FWBusquedas, iContratoCuotas {
 	
 	
     private ImageReference iInmueble = new ResourceImageReference("/resources/crystalsvg22x22/actions/gohome.png");
@@ -530,7 +530,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas {
 		// Obtengo el total de la suma de todas las cuotas
 		double total = 0d; 
 		for(Cuota oCuota: lCuotas) {
-			System.out.println("VALOR CUOTA "+ oCuota.getValor());
+			//System.out.println("VALOR CUOTA "+ oCuota.getValor());
 			total += oCuota.getValor();
 		}
 		
