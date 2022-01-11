@@ -281,7 +281,7 @@ public class ContratoRescindirFiltroView extends ABMListadoFilterView implements
 			
 			// busco los Contratos que tienen por inquilino a la persona seleccionada
 			ContratoListadoModel oModel = new ContratoListadoModel();
-	        dataListPage = ContratoProcesos.findByFilter(true,0,id_inquilino,0,0,9,null,null,false,false);
+	        dataListPage = ContratoProcesos.findByFilter(true,0,id_inquilino,0,0,9,null,null,false,false, null, null, 0);
 	        dataList = dataListPage.getList();
 	        
 //	        try {
@@ -317,7 +317,7 @@ public class ContratoRescindirFiltroView extends ABMListadoFilterView implements
 			
 				/** 1º busco los datos y los cargo en la grilla */
 		        ContratoListadoModel oModel = new ContratoListadoModel();
-		        dataListPage = ContratoProcesos.findByFilter(true,id_inmueble,0,0,0,9, null,null,false,false);
+		        dataListPage = ContratoProcesos.findByFilter(true,id_inmueble,0,0,0,9, null,null,false,false, null, null, 0);
 		        dataList = dataListPage.getList();
 		        
 //		        try {

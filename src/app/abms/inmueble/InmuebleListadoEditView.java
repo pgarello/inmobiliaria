@@ -281,7 +281,7 @@ public class InmuebleListadoEditView extends ABMListadoEditView implements FWBus
     		 */
     		
     		// valido q no tenga un contrato asociado
-    		Page pagina = ContratoProcesos.findByFilter(true, oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false);
+    		Page pagina = ContratoProcesos.findByFilter(true, oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false, null, null, 0);
     		List<Contrato> lista = pagina.getList();
     		for(Contrato oContrato : lista) {
     			

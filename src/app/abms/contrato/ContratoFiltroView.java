@@ -22,6 +22,7 @@ import nextapp.echo2.app.ApplicationInstance;
 
 import nextapp.echo2.app.Color;
 import nextapp.echo2.app.Extent;
+import nextapp.echo2.app.Font;
 import nextapp.echo2.app.ImageReference;
 import nextapp.echo2.app.Insets;
 import nextapp.echo2.app.ResourceImageReference;
@@ -38,11 +39,15 @@ import framework.ui.principal.FWContentPanePrincipal;
 public class ContratoFiltroView extends ABMListadoFilterView implements FWBusquedas, FWFiltros {
 	    
     private CCColumn _cPrincipal, cLabels, cTexts;
-	private CCRow rPrincipal, rMensaje, rInquilino, rInmueble, rPropietario, rFechaDesde, rFechaHasta;
 	
-	private CCLabel lMensaje;
-	private CCLabel lInmueble, lPropietario, lInquilino, lVigentes, lFechaDesde, lFechaHasta, lVacio, lComercial;
-	private CCTextField tInmueble, tPropietario, tInquilino;
+    private CCRow 	rPrincipal, rMensaje, rInquilino, rInmueble, rPropietario, rFechaDesde, rFechaHasta, 
+					rFechaDesdeVencimiento, rFechaHastaVencimiento;
+	
+	private CCLabel lMensaje, lVencimientoCuota, lVencimientoCuota2, lFechaDesdeVencimiento, lFechaHastaVencimiento,
+					lVencimientoContrato, lVencimientoContrato2;	
+	private CCLabel lInmueble, lPropietario, lInquilino, lVigentes, lFechaDesde, lFechaHasta, lVacio, lComercial, lCuotas;
+	
+	private CCTextField tInmueble, tPropietario, tInquilino, tCuotas;
 	
 	private ImageReference iInmueble = new ResourceImageReference("/resources/crystalsvg22x22/actions/gohome.png");
     private CCButton btnInmueble;
@@ -58,8 +63,8 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     
     private CCCheckBox chVigentes, chRescindidos, chComercial;
     
-    CCDateField dfFecha_desde, dfFecha_hasta;
-	CCCheckBox cbFecha_desde, cbFecha_hasta;
+    CCDateField dfFecha_desde, dfFecha_hasta, dfFecha_desdeVencimiento, dfFecha_hastaVencimiento;
+	CCCheckBox cbFecha_desde, cbFecha_hasta, cbFecha_desdeVencimiento, cbFecha_hastaVencimiento;
 	
     private FWContentPanePrincipal CPPrincipal;
 	
@@ -77,14 +82,17 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     	
     	// Seteo el título de la ventana
 		this.setTitle("Filtro para el listado de Contratos - I");
-		this.setHeight(new Extent(450, Extent.PX));
-		this.setWidth(new Extent(700, Extent.PX));
+		this.setHeight(new Extent(500, Extent.PX));
+		this.setWidth(new Extent(800, Extent.PX));
 		
 		CPPrincipal = ((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent());
 		
 		// Agrego los componentes de la pantalla
 		crearObjetos();
 		renderObjetos();
+		
+		//System.out.println("PROBANDO ********************* " + cLabels.get );
+		
     }
     
     private void crearObjetos() {
@@ -153,6 +161,12 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         chRescindidos = new CCCheckBox("Contratos Rescindidos", 22);
         lComercial = new CCLabel("",22);
         chComercial = new CCCheckBox("Contratos Comerciales", 22);
+
+    // BLOQUE VENCIMIENTO CONTRATO
+        lVencimientoContrato = new CCLabel("Vencimiento",30);
+        lVencimientoContrato.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));
+        lVencimientoContrato2 = new CCLabel("CONTRATO",30);
+        lVencimientoContrato2.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));
         
         lFechaDesde = new CCLabel("Vencimiento Desde:",22);
         rFechaDesde = new CCRow(22);
@@ -162,7 +176,6 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         cbFecha_desde.addActionListener(this);
         cbFecha_desde.setActionCommand("desde");
         
-        
         lFechaHasta = new CCLabel("Vencimiento Hasta:",22);        
         rFechaHasta = new CCRow(22);
         dfFecha_hasta = new CCDateField();
@@ -170,6 +183,36 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         cbFecha_hasta = new CCCheckBox(" ");
         cbFecha_hasta.addActionListener(this);
         cbFecha_hasta.setActionCommand("hasta");
+    
+        
+    // BLOQUE VENCIMIENTO DE CUOTA
+        lVencimientoCuota = new CCLabel("Vencimiento",22);
+        lVencimientoCuota.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));        
+        lVencimientoCuota2 = new CCLabel("CUOTAS",22);
+        lVencimientoCuota2.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));        
+        
+        lFechaDesdeVencimiento = new CCLabel("Desde:",22);
+        lFechaDesdeVencimiento.setTextAlignment(Alignment.ALIGN_CENTER);
+        rFechaDesdeVencimiento = new CCRow(22);
+        dfFecha_desdeVencimiento = new CCDateField();
+        dfFecha_desdeVencimiento.setEnabled(false);
+        cbFecha_desdeVencimiento = new CCCheckBox(" ");
+        cbFecha_desdeVencimiento.addActionListener(this);
+        cbFecha_desdeVencimiento.setActionCommand("desdeV");        
+              
+        lFechaHastaVencimiento = new CCLabel("Hasta:",22);
+        lFechaHastaVencimiento.setTextAlignment(Alignment.ALIGN_CENTER);
+        rFechaHastaVencimiento = new CCRow(22);
+        dfFecha_hastaVencimiento = new CCDateField();
+        dfFecha_hastaVencimiento.setEnabled(false);
+        cbFecha_hastaVencimiento = new CCCheckBox(" ");
+        cbFecha_hastaVencimiento.addActionListener(this);
+        cbFecha_hastaVencimiento.setActionCommand("hastaV");
+        
+        lCuotas = new CCLabel("Cuota:",22);
+        tCuotas = new CCTextField(50,22,1,true);
+        tCuotas.setText("0");
+        tCuotas.setRegex("^[0-9]{1,2}$");
         
         
         /*******************************************************************/
@@ -218,8 +261,15 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         cLabels.add(lVacio);
         cLabels.add(lComercial);
         
+        cLabels.add(lVencimientoContrato);
         cLabels.add(lFechaDesde);
         cLabels.add(lFechaHasta);
+        
+        cLabels.add(new CCLabel());
+        cLabels.add(lVencimientoCuota);
+        cLabels.add(lFechaDesdeVencimiento);
+        cLabels.add(lFechaHastaVencimiento);
+        cLabels.add(lCuotas);
         
         // -----------------------------------------------------------
         
@@ -230,6 +280,7 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         cTexts.add(chRescindidos);
         cTexts.add(chComercial);
         
+        cTexts.add(lVencimientoContrato2);
         rFechaDesde.add(dfFecha_desde);
         rFechaDesde.add(cbFecha_desde);
         cTexts.add(rFechaDesde);
@@ -237,6 +288,17 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
         rFechaHasta.add(dfFecha_hasta);
         rFechaHasta.add(cbFecha_hasta);
         cTexts.add(rFechaHasta);    
+        
+        cTexts.add(new CCLabel());
+        cTexts.add(lVencimientoCuota2);        
+        rFechaDesdeVencimiento.add(dfFecha_desdeVencimiento);
+        rFechaDesdeVencimiento.add(cbFecha_desdeVencimiento);
+        cTexts.add(rFechaDesdeVencimiento);
+        
+        rFechaHastaVencimiento.add(dfFecha_hastaVencimiento);
+        rFechaHastaVencimiento.add(cbFecha_hastaVencimiento);
+        cTexts.add(rFechaHastaVencimiento);    
+        cTexts.add(tCuotas);
         
         rMensaje.add(lMensaje);
 
@@ -252,7 +314,20 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     	 que tiene que ser una nueva ventana.
     	 La otra posibilidad es pasar los filtros y realizar la consulta
     	 de datos directamente en la otra pantalla 
-    	 */
+    	 */    	    	
+    	
+    	/* Valido los filtros */
+    	if ( (dfFecha_desdeVencimiento.isEnabled() && !dfFecha_hastaVencimiento.isEnabled()) || 
+    		 (!dfFecha_desdeVencimiento.isEnabled() && dfFecha_hastaVencimiento.isEnabled()) || 
+    		 (dfFecha_desdeVencimiento.isEnabled() && dfFecha_hastaVencimiento.isEnabled()) && tCuotas.getText().equals("0") ||
+    		 (!dfFecha_desdeVencimiento.isEnabled() && !dfFecha_hastaVencimiento.isEnabled()) && !tCuotas.getText().equals("0") ) {
+    		
+			// salgo con ERROR
+			new FWWindowPaneMensajes("Los filtros de vencimiento de cuotas ingresados son erróneos, modifíquelos", "ERROR");
+			return;
+    		
+    	}
+    	
     	
     	/** LLamo a ContratoListadoView */
     	
@@ -280,9 +355,21 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     	Date filtroFechaHasta = null;
     	if (dfFecha_hasta.isEnabled()) filtroFechaHasta = dfFecha_hasta.getSelectedDate().getTime();
     	
+    	Date filtroFechaDesdeV = null;
+    	if (dfFecha_desdeVencimiento.isEnabled()) filtroFechaDesdeV = dfFecha_desdeVencimiento.getSelectedDate().getTime();
+    	
+    	Date filtroFechaHastaV = null;
+    	if (dfFecha_hastaVencimiento.isEnabled()) filtroFechaHastaV = dfFecha_hastaVencimiento.getSelectedDate().getTime();
+    	
+    	int filtro_cuotaV = 0;
+    	if (!tCuotas.getText().equals("0")) filtro_cuotaV = Integer.parseInt( tCuotas.getText() );
+    	
+    	
     	ContratoListadoView oPantallaListado = new ContratoListadoView(	filtro_inmueble, filtro_propietario, filtro_inquilino, 
     																	filtro_vigente, this, filtroFechaDesde, filtroFechaHasta, 
-    																	filtro_rescindido, filtro_comercial);
+    																	filtro_rescindido, filtro_comercial, 
+    																	filtroFechaDesdeV, filtroFechaHastaV, filtro_cuotaV);
+    	
     	((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent()).abrirVentana(oPantallaListado);
     	
     }
@@ -297,9 +384,18 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     		if (obj.getActionCommand().equals("desde")) {
     			if (obj.isSelected()) dfFecha_desde.setEnabled(true);
         		else dfFecha_desde.setEnabled(false);
+    		
     		} else if (obj.getActionCommand().equals("hasta")) {
     			if (obj.isSelected()) dfFecha_hasta.setEnabled(true);
         		else dfFecha_hasta.setEnabled(false);
+    		
+    		} else if (obj.getActionCommand().equals("desdeV")) {
+    			if (obj.isSelected()) dfFecha_desdeVencimiento.setEnabled(true);
+        		else dfFecha_desdeVencimiento.setEnabled(false);
+    		
+    		} else if (obj.getActionCommand().equals("hastaV")) {
+    			if (obj.isSelected()) dfFecha_hastaVencimiento.setEnabled(true);
+        		else dfFecha_hastaVencimiento.setEnabled(false);    			    		
     		}    		
     		
     	} else  if (ae.getActionCommand().equals("inquilino")){
@@ -316,7 +412,7 @@ public class ContratoFiltroView extends ABMListadoFilterView implements FWBusque
     		
     	}
     	
-    	// Tiro el evento para arriba en la gerarquia de objetos
+    	// Tiro el evento para arriba en la jerarquía de objetos
     	super.actionPerformed(ae);
     	
     }

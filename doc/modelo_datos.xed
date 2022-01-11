@@ -1,0 +1,894 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Diagram version="1.0" type="POSTGRES" versionMajor="9" versionMinor="0" groupSchema="false">
+   <Table id="0" name="contrato" schema="public" database="inmobiliaria">
+      <Column id="1" name="id_contrato" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.contrato_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="2" name="fecha_desde" type="date" length="0" nulls="true"/>
+      <Column id="3" name="fecha_hasta" type="date" length="0" nulls="true"/>
+      <Column id="4" name="fecha_extension" type="date" length="0" nulls="true">
+         <CP name="COMMENTS">La voy a usar como fecha de baja o rescinción. A partir de esta fecha el contrato no está mas vigente</CP>
+      </Column>
+      <Column id="5" name="observaciones" type="text" length="0" nulls="true"/>
+      <Column id="6" name="monto" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="7" name="cantidad_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="8" name="id_inmueble" type="int4" length="0" nulls="true"/>
+      <Column id="9" name="comision_prop_porc" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">9</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="10" name="comision_prop_fija" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">9</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="11" name="comision_inquilino" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">9</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="12" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+      <Column id="13" name="id_facturero" type="int4" length="0" nulls="false"/>
+      <Column id="14" name="fecha_rescision" type="date" length="0" nulls="true"/>
+      <Column id="15" name="comercial" type="bool" length="0" nulls="true">
+         <CP name="DEFAULT_VALUE">false</CP>
+      </Column>
+   </Table>
+   <Table id="16" name="contrato_actor" schema="public" database="inmobiliaria">
+      <Column id="17" name="id_contrato" type="int4" length="0" nulls="false"/>
+      <Column id="18" name="id_actor_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="19" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="20" name="fecha_baja" type="date" length="0" nulls="true"/>
+      <Column id="21" name="porcentaje" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">5</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+   </Table>
+   <Table id="22" name="contrato_novedad_cobro" schema="public" database="inmobiliaria">
+      <Column id="23" name="id_contrato_novedad_cobro" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.contrato_novedad_cobro_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="24" name="id_contrato" type="int4" length="0" nulls="false"/>
+      <Column id="25" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="26" name="id_novedad_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="27" name="periodo_mes" type="int2" length="0" nulls="true"/>
+      <Column id="28" name="periodo_anio" type="int2" length="0" nulls="true"/>
+      <Column id="29" name="contrato_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="30" name="monto" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="31" name="fecha_vencimiento" type="date" length="0" nulls="true"/>
+      <Column id="32" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+      <Column id="33" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="34" name="id_impuesto" type="int2" length="0" nulls="true"/>
+      <Column id="35" name="impuesto_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="36" name="impuesto_anio" type="int2" length="0" nulls="true"/>
+   </Table>
+   <Table id="37" name="contrato_novedad_factura" schema="public" database="inmobiliaria">
+      <Column id="38" name="id_novedad_factura" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.novedad_factura_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="39" name="id_contrato" type="int4" length="0" nulls="true"/>
+      <Column id="40" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="41" name="id_novedad_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="42" name="periodo_mes" type="int2" length="0" nulls="true"/>
+      <Column id="43" name="periodo_anio" type="int2" length="0" nulls="true"/>
+      <Column id="44" name="contrato_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="45" name="monto" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="46" name="fecha_vencimiento" type="date" length="0" nulls="true"/>
+      <Column id="47" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+   </Table>
+   <Table id="48" name="contrato_novedad_pago" schema="public" database="inmobiliaria">
+      <Column id="49" name="id_contrato_novedad_pago" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.contrato_novedad_pago_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="50" name="id_contrato" type="int4" length="0" nulls="false"/>
+      <Column id="51" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="52" name="id_novedad_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="53" name="periodo_mes" type="int2" length="0" nulls="true"/>
+      <Column id="54" name="periodo_anio" type="int2" length="0" nulls="true"/>
+      <Column id="55" name="contrato_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="56" name="monto" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="57" name="fecha_liquidacion" type="date" length="0" nulls="true">
+         <CP name="COMMENTS">Es la fecha a partir de la cual le liquido la novedad al propietario</CP>
+      </Column>
+      <Column id="58" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+      <Column id="59" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="60" name="id_impuesto" type="int2" length="0" nulls="true"/>
+      <Column id="61" name="impuesto_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="62" name="impuesto_anio" type="int2" length="0" nulls="true"/>
+   </Table>
+   <Table id="63" name="edificio" schema="public" database="inmobiliaria">
+      <Column id="64" name="id_edificio" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.edificio_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="65" name="descripcion" type="varchar" length="100" nulls="false"/>
+      <Column id="66" name="observaciones" type="text" length="0" nulls="true"/>
+      <Column id="67" name="dpto_cantidad" type="int2" length="0" nulls="true"/>
+   </Table>
+   <Table id="68" name="factura" schema="public" database="inmobiliaria">
+      <Column id="69" name="id_factura" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.factura_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="70" name="numero" type="int4" length="0" nulls="false"/>
+      <Column id="71" name="factura_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="72" name="fecha_emision" type="timestamp" length="0" nulls="false"/>
+      <Column id="73" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="74" name="id_inscripcion_iva" type="int2" length="0" nulls="false"/>
+      <Column id="75" name="cliente" type="varchar" length="100" nulls="false"/>
+      <Column id="76" name="cuit_dni" type="varchar" length="20" nulls="false"/>
+      <Column id="77" name="domicilio" type="varchar" length="100" nulls="false"/>
+      <Column id="78" name="id_usuario" type="int2" length="0" nulls="false"/>
+      <Column id="79" name="leyenda" type="varchar" length="200" nulls="true">
+         <CP name="DEFAULT_VALUE">''::character varying</CP>
+      </Column>
+      <Column id="80" name="anulada" type="bool" length="0" nulls="false"/>
+   </Table>
+   <Table id="81" name="factura_item" schema="public" database="inmobiliaria">
+      <Column id="82" name="id_factura_item" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.factura_item_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="83" name="id_factura" type="int4" length="0" nulls="false"/>
+      <Column id="84" name="id_novedad_factura" type="int4" length="0" nulls="true"/>
+      <Column id="85" name="id_recibo_pago_item" type="int4" length="0" nulls="true"/>
+      <Column id="86" name="id_recibo_cobro_item" type="int4" length="0" nulls="true"/>
+      <Column id="87" name="monto" type="numeric" length="0" nulls="false">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="88" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="89" name="id_item_tipo" type="int2" length="0" nulls="false"/>
+   </Table>
+   <Table id="90" name="facturero" schema="public" database="inmobiliaria">
+      <Column id="91" name="id_facturero" type="int4" length="0" nulls="false"/>
+      <Column id="92" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+      <Column id="93" name="fecha_vencimiento" type="date" length="0" nulls="false"/>
+      <Column id="94" name="fecha_impresion" type="date" length="0" nulls="true"/>
+      <Column id="95" name="numero_desde" type="int8" length="0" nulls="false"/>
+      <Column id="96" name="numero_hasta" type="int8" length="0" nulls="false"/>
+      <Column id="97" name="punto_de_venta" type="int2" length="0" nulls="true"/>
+      <Column id="98" name="indice_actual" type="int8" length="0" nulls="false"/>
+      <Column id="99" name="razon_social" type="varchar" length="100" nulls="true"/>
+      <Column id="100" name="observaciones" type="text" length="0" nulls="true"/>
+   </Table>
+   <Table id="101" name="impuesto" schema="public" database="inmobiliaria">
+      <Column id="102" name="id_impuesto" type="int4" length="0" nulls="false"/>
+      <Column id="103" name="descripcion" type="varchar" length="100" nulls="true"/>
+      <Column id="104" name="descripcion_corta" type="varchar" length="10" nulls="true"/>
+      <Column id="105" name="mensualidad" type="int2" length="0" nulls="true"/>
+   </Table>
+   <Table id="106" name="inmueble" schema="public" database="inmobiliaria">
+      <Column id="107" name="id_inmueble" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.inmueble_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="108" name="id_inmueble_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="109" name="id_localidad" type="int4" length="0" nulls="false"/>
+      <Column id="110" name="direccion_calle" type="varchar" length="100" nulls="true"/>
+      <Column id="111" name="direccion_nro" type="varchar" length="10" nulls="true"/>
+      <Column id="112" name="direccion_edificio" type="varchar" length="50" nulls="true"/>
+      <Column id="113" name="direccion_piso" type="varchar" length="10" nulls="true"/>
+      <Column id="114" name="direccion_dpto" type="varchar" length="10" nulls="true"/>
+      <Column id="115" name="observaciones" type="text" length="0" nulls="true"/>
+      <Column id="116" name="id_propietario" type="int4" length="0" nulls="true"/>
+      <Column id="117" name="id_edificio" type="int4" length="0" nulls="true"/>
+   </Table>
+   <Table id="118" name="inmueble_tipo" schema="public" database="inmobiliaria">
+      <Column id="119" name="id_inmueble_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="120" name="descripcion" type="varchar" length="30" nulls="false"/>
+      <Column id="121" name="descripcion_corta" type="varchar" length="10" nulls="true"/>
+   </Table>
+   <Table id="122" name="item_tipo" schema="public" database="inmobiliaria">
+      <Column id="123" name="id_item_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="124" name="descripcion" type="varchar" length="30" nulls="false"/>
+      <Column id="125" name="descripcion_corta" type="varchar" length="10" nulls="true"/>
+   </Table>
+   <Table id="126" name="localidad" schema="public" database="inmobiliaria">
+      <Column id="127" name="id_localidad" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.localidad_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="128" name="descripcion" type="varchar" length="100" nulls="false"/>
+      <Column id="129" name="provincia" type="varchar" length="50" nulls="false"/>
+      <Column id="130" name="cp" type="varchar" length="10" nulls="true"/>
+   </Table>
+   <Table id="131" name="log_contrato_novedad_cobro" schema="public" database="inmobiliaria">
+      <Column id="132" name="id_log_contrato_novedad_cobro" type="int4" length="0" nulls="false"/>
+      <Column id="133" name="operacion" type="varchar" length="10" nulls="false"/>
+      <Column id="134" name="fecha" type="timestamp" length="0" nulls="false"/>
+      <Column id="135" name="id_contrato_novedad_cobro" type="int4" length="0" nulls="false"/>
+      <Column id="136" name="id_contrato" type="int4" length="0" nulls="false"/>
+      <Column id="137" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="138" name="id_novedad_tipo" type="int2" length="0" nulls="false"/>
+      <Column id="139" name="periodo_mes" type="int2" length="0" nulls="true"/>
+      <Column id="140" name="periodo_anio" type="int2" length="0" nulls="true"/>
+      <Column id="141" name="contrato_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="142" name="monto" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="143" name="fecha_vencimiento" type="date" length="0" nulls="true"/>
+      <Column id="144" name="fecha_alta" type="timestamp" length="0" nulls="false"/>
+      <Column id="145" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="146" name="id_impuesto" type="int2" length="0" nulls="true"/>
+      <Column id="147" name="impuesto_cuota" type="int2" length="0" nulls="true"/>
+      <Column id="148" name="impuesto_anio" type="int2" length="0" nulls="true"/>
+   </Table>
+   <Table id="149" name="novedad_tipo" schema="public" database="inmobiliaria">
+      <Column id="150" name="id_novedad_tipo" type="int4" length="0" nulls="false"/>
+      <Column id="151" name="descripcion" type="varchar" length="100" nulls="false"/>
+   </Table>
+   <Table id="152" name="persona" schema="public" database="inmobiliaria">
+      <Column id="153" name="id_persona" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.persona_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="154" name="apellido" type="varchar" length="50" nulls="true"/>
+      <Column id="155" name="nombres" type="varchar" length="50" nulls="true"/>
+      <Column id="156" name="id_documento_tipo" type="int2" length="0" nulls="true"/>
+      <Column id="157" name="documento_nro" type="numeric" length="0" nulls="true">
+         <CP name="PRECISION">9</CP>
+         <CP name="SCALE">0</CP>
+      </Column>
+      <Column id="158" name="id_localidad" type="int4" length="0" nulls="true"/>
+      <Column id="159" name="fecha_nacimiento" type="date" length="0" nulls="true"/>
+      <Column id="160" name="direccion" type="varchar" length="200" nulls="true"/>
+      <Column id="161" name="id_inscripcion_iva" type="int2" length="0" nulls="false"/>
+      <Column id="162" name="cuit" type="varchar" length="13" nulls="true"/>
+      <Column id="163" name="telefono" type="varchar" length="30" nulls="true"/>
+      <Column id="164" name="celular" type="varchar" length="30" nulls="true"/>
+      <Column id="165" name="mail" type="varchar" length="100" nulls="true"/>
+      <Column id="166" name="razon_social" type="varchar" length="100" nulls="true"/>
+      <Column id="167" name="fecha_alta" type="date" length="0" nulls="true"/>
+      <Column id="168" name="id_persona_tipo" type="int4" length="0" nulls="false"/>
+      <Column id="169" name="sexo" type="char" length="1" nulls="true"/>
+      <Column id="170" name="observaciones" type="varchar" length="255" nulls="true"/>
+      <Column id="171" name="id_inscripcion_ganancia" type="int2" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">1</CP>
+      </Column>
+   </Table>
+   <Table id="172" name="recibo_cobro" schema="public" database="inmobiliaria">
+      <Column id="173" name="id_recibo_cobro" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.recibo_cobro_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="174" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="175" name="numero" type="int4" length="0" nulls="true"/>
+      <Column id="176" name="fecha_emision" type="timestamp" length="0" nulls="false"/>
+      <Column id="177" name="leyenda" type="varchar" length="200" nulls="true"/>
+      <Column id="178" name="id_usuario" type="int4" length="0" nulls="false"/>
+   </Table>
+   <Table id="179" name="recibo_cobro_item" schema="public" database="inmobiliaria">
+      <Column id="180" name="id_recibo_cobro_item" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.recibo_cobro_item_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="181" name="id_recibo_cobro" type="int4" length="0" nulls="false"/>
+      <Column id="182" name="id_novedad" type="int4" length="0" nulls="true"/>
+      <Column id="183" name="monto" type="numeric" length="0" nulls="false">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="184" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="185" name="id_item_tipo" type="int2" length="0" nulls="false"/>
+   </Table>
+   <Table id="186" name="recibo_pago" schema="public" database="inmobiliaria">
+      <Column id="187" name="id_recibo_pago" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.recibo_pago_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="188" name="id_persona" type="int4" length="0" nulls="false"/>
+      <Column id="189" name="numero" type="int4" length="0" nulls="true"/>
+      <Column id="190" name="fecha_emision" type="timestamp" length="0" nulls="false"/>
+      <Column id="191" name="leyenda" type="varchar" length="200" nulls="true"/>
+      <Column id="192" name="id_usuario" type="int4" length="0" nulls="false"/>
+   </Table>
+   <Table id="193" name="recibo_pago_item" schema="public" database="inmobiliaria">
+      <Column id="194" name="id_recibo_pago_item" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.recibo_pago_item_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="195" name="id_recibo_pago" type="int4" length="0" nulls="false"/>
+      <Column id="196" name="id_novedad" type="int4" length="0" nulls="true"/>
+      <Column id="197" name="monto" type="numeric" length="0" nulls="false">
+         <CP name="PRECISION">18</CP>
+         <CP name="SCALE">2</CP>
+      </Column>
+      <Column id="198" name="descripcion" type="varchar" length="200" nulls="true"/>
+      <Column id="199" name="id_item_tipo" type="int2" length="0" nulls="false"/>
+   </Table>
+   <Table id="200" name="setup" schema="public" database="inmobiliaria">
+      <Column id="201" name="id_setup" type="int4" length="0" nulls="false"/>
+      <Column id="202" name="fecha_actualizacion" type="timestamp" length="0" nulls="true"/>
+      <Column id="203" name="tabla" type="varchar" length="100" nulls="false"/>
+      <Column id="204" name="id_facturero" type="int2" length="0" nulls="true"/>
+      <Column id="205" name="indice" type="int8" length="0" nulls="false"/>
+      <Column id="206" name="observaciones" type="text" length="0" nulls="true"/>
+   </Table>
+   <Table id="207" name="usuario" schema="public" database="inmobiliaria">
+      <Column id="208" name="id_usuario" type="int4" length="0" nulls="false">
+         <CP name="DEFAULT_VALUE">nextval(('public.usuario_id_seq'::text)::regclass)</CP>
+      </Column>
+      <Column id="209" name="usuario" type="varchar" length="20" nulls="false"/>
+      <Column id="210" name="clave" type="varchar" length="20" nulls="false"/>
+      <Column id="211" name="descripcion" type="varchar" length="100" nulls="true"/>
+      <Column id="212" name="administrador" type="bool" length="0" nulls="true"/>
+   </Table>
+   <Relation id="213" name="contrato__inmueble" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>107</FK>
+      <PK>8</PK>
+   </Relation>
+   <Relation id="214" name="contrato__facturero" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>91</FK>
+      <PK>13</PK>
+   </Relation>
+   <Relation id="215" name="contrato_actor__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>19</PK>
+   </Relation>
+   <Relation id="216" name="contrato_actor__contrato" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>1</FK>
+      <PK>17</PK>
+   </Relation>
+   <Relation id="217" name="contrato_novedad_cobro__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>150</FK>
+      <PK>26</PK>
+   </Relation>
+   <Relation id="218" name="contrato_novedad_cobro__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>25</PK>
+   </Relation>
+   <Relation id="219" name="contrato_novedad_cobro__contrato" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>1</FK>
+      <PK>24</PK>
+   </Relation>
+   <Relation id="220" name="contrato_novedad_factura__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>150</FK>
+      <PK>41</PK>
+   </Relation>
+   <Relation id="221" name="contrato_novedad_factura__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>40</PK>
+   </Relation>
+   <Relation id="222" name="contrato_novedad_factura__contrato" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>1</FK>
+      <PK>39</PK>
+   </Relation>
+   <Relation id="223" name="contrato_novedad_pago__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>150</FK>
+      <PK>52</PK>
+   </Relation>
+   <Relation id="224" name="contrato_novedad_pago__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>51</PK>
+   </Relation>
+   <Relation id="225" name="contrato_novedad_pago__impuesto" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>102</FK>
+      <PK>60</PK>
+   </Relation>
+   <Relation id="226" name="contrato_novedad_pago__contrato" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>1</FK>
+      <PK>50</PK>
+   </Relation>
+   <Relation id="227" name="factura__usuario" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>208</FK>
+      <PK>78</PK>
+   </Relation>
+   <Relation id="228" name="factura__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>73</PK>
+   </Relation>
+   <Relation id="229" name="factura_item__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>123</FK>
+      <PK>89</PK>
+   </Relation>
+   <Relation id="230" name="factura_item__pago" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>194</FK>
+      <PK>85</PK>
+   </Relation>
+   <Relation id="231" name="factura_item__novedad" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>38</FK>
+      <PK>84</PK>
+   </Relation>
+   <Relation id="232" name="factura_item__factura" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>69</FK>
+      <PK>83</PK>
+   </Relation>
+   <Relation id="233" name="factura_item__cobro" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>180</FK>
+      <PK>86</PK>
+   </Relation>
+   <Relation id="234" name="inmueble__propietario" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>116</PK>
+   </Relation>
+   <Relation id="235" name="inmueble__localidad" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>127</FK>
+      <PK>109</PK>
+   </Relation>
+   <Relation id="236" name="inmueble__inmueble_tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>119</FK>
+      <PK>108</PK>
+   </Relation>
+   <Relation id="237" name="inmueble__edificio" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>64</FK>
+      <PK>117</PK>
+   </Relation>
+   <Relation id="238" name="persona__localidad" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>127</FK>
+      <PK>158</PK>
+   </Relation>
+   <Relation id="239" name="recibo_cobro__usuario" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>208</FK>
+      <PK>178</PK>
+   </Relation>
+   <Relation id="240" name="recibo_cobro__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>174</PK>
+   </Relation>
+   <Relation id="241" name="recibo_cobro_item__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>123</FK>
+      <PK>185</PK>
+   </Relation>
+   <Relation id="242" name="recibo_cobro_item__recibo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>173</FK>
+      <PK>181</PK>
+   </Relation>
+   <Relation id="243" name="recibo_cobro_item__novedad" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>23</FK>
+      <PK>182</PK>
+   </Relation>
+   <Relation id="244" name="recibo_pago__usuario" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>208</FK>
+      <PK>192</PK>
+   </Relation>
+   <Relation id="245" name="recibo_pago__persona" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>153</FK>
+      <PK>188</PK>
+   </Relation>
+   <Relation id="246" name="recibo_pago_item__tipo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>123</FK>
+      <PK>199</PK>
+   </Relation>
+   <Relation id="247" name="recibo_pago_item__recibo" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>187</FK>
+      <PK>195</PK>
+   </Relation>
+   <Relation id="248" name="recibo_pago_item__novedad" cardinality="-2" identifying="false" nulls="false">
+      <Option name="initially" class="String" value="IMMEDIATE"></Option>
+      <Option name="deferrable" class="Boolean" value="false"></Option>
+      <Option name="match" class="String" value=""></Option>
+      <Option name="onDelete" class="String" value="NO ACTION"></Option>
+      <Option name="onUpdate" class="String" value="NO ACTION"></Option>
+      <FK>49</FK>
+      <PK>196</PK>
+   </Relation>
+   <Index table="0" name="contrato_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="8" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="0" name="contrato_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="8" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="22" name="contrato_novedad_cobro__idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="25" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="22" name="contrato_novedad_cobro__idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="24" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="22" name="contrato_novedad_cobro_idx3" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="27" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="28" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="22" name="contrato_novedad_cobro_idx4" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="31" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="48" name="contrato_novedad_pago__idx3" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="53" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="54" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="48" name="contrato_novedad_pago__idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="51" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="48" name="contrato_novedad_pago__idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="50" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="68" name="factura_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="71" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="70" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="106" name="inmueble_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="116" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="106" name="inmueble_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="110" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="126" name="localidad_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="128" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="152" name="persona_idx_localidad" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="158" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="152" name="persona_idx_documento" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="156" sequence="0" ascending="true"></IndexColumn>
+      <IndexColumn id="157" sequence="1" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="152" name="persona_idx_apellido" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="154" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="172" name="recibo_cobro_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="174" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="172" name="recibo_cobro_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="175" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="179" name="recibo_cobro_item_idx3" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="185" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="179" name="recibo_cobro_item_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="182" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="179" name="recibo_cobro_item_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="181" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="186" name="recibo_pago_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="188" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="186" name="recibo_pago_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="true"></Option>
+      <IndexColumn id="189" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="193" name="recibo_pago_item_idx1" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="195" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="193" name="recibo_pago_item_idx3" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="199" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Index table="193" name="recibo_pago_item_idx2" schema="public" database="inmobiliaria">
+      <Option name="unique" class="Boolean" value="false"></Option>
+      <IndexColumn id="196" sequence="0" ascending="true"></IndexColumn>
+   </Index>
+   <Constraint table="0" name="contrato_pkey" type="PrimKey">
+      <ConstraintColumn id="1"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="16" name="contrato_actor_pkey" type="PrimKey">
+      <ConstraintColumn id="18"></ConstraintColumn>
+      <ConstraintColumn id="17"></ConstraintColumn>
+      <ConstraintColumn id="19"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="22" name="contrato_novedad_cobro_pkey" type="PrimKey">
+      <ConstraintColumn id="23"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="37" name="contrato_novedad_factura_pkey" type="PrimKey">
+      <ConstraintColumn id="38"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="48" name="contrato_novedad_pago_pkey" type="PrimKey">
+      <ConstraintColumn id="49"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="63" name="edificio_pk" type="PrimKey">
+      <ConstraintColumn id="64"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="68" name="factura_pkey" type="PrimKey">
+      <ConstraintColumn id="69"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="81" name="factura_item_pkey" type="PrimKey">
+      <ConstraintColumn id="82"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="90" name="facturero_pkey" type="PrimKey">
+      <ConstraintColumn id="91"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="101" name="impuesto_pkey" type="PrimKey">
+      <ConstraintColumn id="102"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="106" name="inmueble_pkey" type="PrimKey">
+      <ConstraintColumn id="107"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="118" name="inmueble_tipo_pkey" type="PrimKey">
+      <ConstraintColumn id="119"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="122" name="item_tipo_pkey" type="PrimKey">
+      <ConstraintColumn id="123"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="126" name="localidad_pkey" type="PrimKey">
+      <ConstraintColumn id="127"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="131" name="log_contrato_novedad_cobro_pkey" type="PrimKey">
+      <ConstraintColumn id="132"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="149" name="novedad_tipo_pkey" type="PrimKey">
+      <ConstraintColumn id="150"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="152" name="persona_pkey" type="PrimKey">
+      <ConstraintColumn id="153"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="172" name="recibo_cobro_pkey" type="PrimKey">
+      <ConstraintColumn id="173"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="179" name="recibo_cobro_item_pkey" type="PrimKey">
+      <ConstraintColumn id="180"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="186" name="recibo_pago_pkey" type="PrimKey">
+      <ConstraintColumn id="187"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="193" name="recibo_pago_item_pkey" type="PrimKey">
+      <ConstraintColumn id="194"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="200" name="setup_pkey" type="PrimKey">
+      <ConstraintColumn id="201"></ConstraintColumn>
+   </Constraint>
+   <Constraint table="207" name="usuario_pk" type="PrimKey">
+      <ConstraintColumn id="208"></ConstraintColumn>
+   </Constraint>
+   <Sheet name="Sin título 2" id="249" disp_at="true" disp_ph="true" disp_co="true" disp_rn="true">
+      <Place id="101" visible="true">261,24,240,90</Place>
+      <Place id="48" visible="true">1051,24,240,260</Place>
+      <Place id="226" visible="true">500,0,0,0</Place>
+      <Place id="246" visible="true">500,0,0,0</Place>
+      <Place id="228" visible="true">500,0,0,0</Place>
+      <Place id="213" visible="true">500,0,0,0</Place>
+      <Place id="172" visible="true">261,344,200,130</Place>
+      <Place id="37" visible="true">751,344,200,190</Place>
+      <Place id="118" visible="true">1271,344,240,80</Place>
+      <Place id="234" visible="true">500,0,0,0</Place>
+      <Place id="238" visible="true">500,0,0,0</Place>
+      <Place id="122" visible="true">1551,344,240,80</Place>
+      <Place id="248" visible="true">500,0,0,0</Place>
+      <Place id="81" visible="true">281,644,210,160</Place>
+      <Place id="229" visible="true">500,0,0,0</Place>
+      <Place id="215" visible="true">500,0,0,0</Place>
+      <Place id="245" visible="true">500,0,0,0</Place>
+      <Place id="179" visible="true">1281,644,200,130</Place>
+      <Place id="216" visible="true">500,0,0,0</Place>
+      <Place id="242" visible="true">500,0,0,0</Place>
+      <Place id="16" visible="true">541,24,190,110</Place>
+      <Place id="243" visible="true">500,0,0,0</Place>
+      <Place id="126" visible="true">1331,24,200,90</Place>
+      <Place id="63" visible="true">1571,24,200,90</Place>
+      <Place id="227" visible="true">500,0,0,0</Place>
+      <Place id="200" visible="true">21,1034,240,130</Place>
+      <Place id="149" visible="true">1811,24,200,60</Place>
+      <Place id="186" visible="true">21,344,200,130</Place>
+      <Place id="90" visible="true">501,344,210,190</Place>
+      <Place id="220" visible="true">500,0,0,0</Place>
+      <Place id="241" visible="true">500,0,0,0</Place>
+      <Place id="22" visible="true">991,344,240,260</Place>
+      <Place id="240" visible="true">500,0,0,0</Place>
+      <Place id="152" visible="true">21,644,220,350</Place>
+      <Place id="247" visible="true">500,0,0,0</Place>
+      <Place id="193" visible="true">801,644,200,130</Place>
+      <Place id="68" visible="true">1041,644,200,230</Place>
+      <Place id="222" visible="true">500,0,0,0</Place>
+      <Place id="207" visible="true">21,24,200,110</Place>
+      <Place id="244" visible="true">500,0,0,0</Place>
+      <Place id="232" visible="true">500,0,0,0</Place>
+      <Place id="0" visible="true">771,24,240,280</Place>
+      <Place id="131" visible="true">1521,644,270,310</Place>
+      <Place id="223" visible="true">500,0,0,0</Place>
+      <Place id="233" visible="true">500,0,0,0</Place>
+      <Place id="230" visible="true">500,0,0,0</Place>
+      <Place id="236" visible="true">500,0,0,0</Place>
+      <Place id="106" visible="true">531,644,230,210</Place>
+      <Place id="235" visible="true">500,0,0,0</Place>
+      <Place id="214" visible="true">500,0,0,0</Place>
+      <Place id="217" visible="true">500,0,0,0</Place>
+      <Place id="239" visible="true">500,0,0,0</Place>
+      <Place id="225" visible="true">500,0,0,0</Place>
+      <Place id="219" visible="true">500,0,0,0</Place>
+      <Place id="231" visible="true">500,0,0,0</Place>
+      <Place id="218" visible="true">500,0,0,0</Place>
+      <Place id="221" visible="true">500,0,0,0</Place>
+      <Place id="237" visible="true">500,0,0,0</Place>
+      <Place id="224" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Sheet name="Contrato" id="250" disp_at="true" disp_ph="true" disp_co="true">
+      <Place id="222" visible="true" options="10.0,10.0,240.0,280.0,460.0,320.0,200.0,190.0,4,250.0,230.0,350.0,230.0,350.0,450.0,460.0,450.0">500,0,0,0</Place>
+      <Place id="37" visible="true">460,320,200,190</Place>
+      <Place id="22" visible="true">460,30,240,260</Place>
+      <Place id="16" visible="true">20,430,190,110</Place>
+      <Place id="226" visible="true" options="10.0,10.0,240.0,280.0,460.0,530.0,240.0,260.0,4,250.0,270.0,300.0,270.0,300.0,710.0,460.0,710.0">500,0,0,0</Place>
+      <Place id="48" visible="true">460,530,240,260</Place>
+      <Place id="219" visible="true">500,0,0,0</Place>
+      <Place id="0" visible="true">10,10,240,280</Place>
+      <Place id="216" visible="true">500,0,0,0</Place>
+   </Sheet>
+   <Settings sheet="250" zoom="1.0"></Settings>
+</Diagram>

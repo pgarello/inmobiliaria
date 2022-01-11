@@ -491,7 +491,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
 			
 			// Busco las comisiones que se le cobro al propietario por otros contratos
 			int filtro_propietario = oInmueble.getPropietario().getIdPersona();
-			List<Contrato> lContratos = (ContratoProcesos.findByFilter(false, 0, 0, filtro_propietario, 0, 0, null, null, false, false)).getList();			
+			List<Contrato> lContratos = (ContratoProcesos.findByFilter(false, 0, 0, filtro_propietario, 0, 0, null, null, false, false, null, null, 0)).getList();			
 			HashMap<Double,Double> hmPorcentajes = new HashMap<Double,Double>();
 			for (Contrato oContrato : lContratos) {
 				Double porcentaje = oContrato.getComisionPropPorc();

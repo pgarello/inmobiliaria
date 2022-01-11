@@ -13,7 +13,7 @@ public void run() {
 	Calendar oFecha = Calendar.getInstance();
     
 	int minuto = 25;
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 	System.out.println(
 			sdf.format(oFecha.getTime()) + 
 			" MinJob trigged by scheduler - " + minuto );

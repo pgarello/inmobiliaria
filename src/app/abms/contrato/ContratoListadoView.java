@@ -52,6 +52,10 @@ public class ContratoListadoView extends ABMListadoPrintView {
 	private Date filtro_fecha_desde;
 	private Date filtro_fecha_hasta;
 	
+	private Date filtro_fecha_desdeVencimiento;
+	private Date filtro_fecha_hastaVencimiento;
+	private int filtro_cuotaVencimiento;
+	
     
     public ContratoListadoView (int filtro_inmueble,
     							int filtroPropietario,
@@ -61,7 +65,10 @@ public class ContratoListadoView extends ABMListadoPrintView {
     							Date filtro_fecha_desde, 
     							Date filtro_fecha_hasta,
     							boolean filtroRescindido,
-    							boolean filtroComercial) {
+    							boolean filtroComercial,
+    							Date filtro_fecha_desdeV, 
+    							Date filtro_fecha_hastaV,
+    							int filtro_cuotaV) {
     	
         super(null);
         
@@ -75,6 +82,9 @@ public class ContratoListadoView extends ABMListadoPrintView {
         this.filtro_fecha_hasta = filtro_fecha_hasta;
         this.filtroRescindido = filtroRescindido;
         this.filtroComercial = filtroComercial;
+        this.filtro_fecha_desdeVencimiento = filtro_fecha_desdeV;
+        this.filtro_fecha_hastaVencimiento = filtro_fecha_hastaV;
+        this.filtro_cuotaVencimiento = filtro_cuotaV;
         
         this.setTitle("ABM de Contratos - Listado - II");
         this.setWidth(new Extent(800, Extent.PX));
@@ -101,8 +111,10 @@ public class ContratoListadoView extends ABMListadoPrintView {
     	//System.out.println("Filtro inq :" + filtroInquilino);
     	
         ContratoListadoModel oModel = new ContratoListadoModel();
-        dataListPage = ContratoProcesos.findByFilter(filtroVigentes, filtro_inmueble, filtroInquilino, filtroPropietario, page_number, page_size, filtro_fecha_desde, 
-        											 filtro_fecha_hasta, filtroRescindido, filtroComercial);
+        dataListPage = ContratoProcesos.findByFilter(filtroVigentes, filtro_inmueble, filtroInquilino, filtroPropietario, 
+        											 page_number, page_size, filtro_fecha_desde, 
+        											 filtro_fecha_hasta, filtroRescindido, filtroComercial,
+        											 filtro_fecha_desdeVencimiento, filtro_fecha_hastaVencimiento, filtro_cuotaVencimiento);
         dataList = dataListPage.getList();
         
         try {

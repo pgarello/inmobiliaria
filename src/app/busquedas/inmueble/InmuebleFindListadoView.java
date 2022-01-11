@@ -215,7 +215,7 @@ public class InmuebleFindListadoView extends ListadoFindView {
         	
         	// llamo al proceso que valida la existencia de un contrato vigente
         	if (this.vigente) {
-        		int contratos = (ContratoProcesos.findByFilter(this.vigente, oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false)).getList().size();
+        		int contratos = (ContratoProcesos.findByFilter(this.vigente, oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false, null, null, 0)).getList().size();
         		//System.out.println("CONTRATO: " + contratos);
         		if (contratos > 0)
         			dataList_filtrada.add(oInmueble);

@@ -44,8 +44,11 @@ public class ContratoProcesos {
 	 * @param filtro_propietario el id de la persona
 	 * @param page_number primera página 0 (cero)
 	 * @param page_size
-	 * @param fecha_desde
-	 * @param fecha_hasta
+	 * @param fecha_desde Fecha desde para el inicio del CONTRATO
+	 * @param fecha_hasta Fecha hasta para el fin del CONTRATO
+	 * @param fecha_desdeVencimiento Fecha desde para el vencimiento de una cuota en particular del CONTRATO
+	 * @param fecha_hastaVencimiento Fecha hasta para el vencimiento de una cuota en particular del CONTRATO
+	 * @param cuota_vencimiento Cuota a evaluar cuando vence
 	 * @return Page<Contrato>
 	 */
 	public static Page findByFilter(boolean filtro_vigente,
@@ -57,19 +60,27 @@ public class ContratoProcesos {
 									Date filtro_fecha_desde,
 									Date filtro_fecha_hasta,
 									boolean filtro_rescindido,
-									boolean filtro_comercial) {
+									boolean filtro_comercial,
+									Date filtro_fecha_desdeVencimiento,
+									Date filtro_fecha_hastaVencimiento,
+									int cuota_vencimiento) {
 			
 		Session oSessionH = SessionFactory.currentSession();
 		
 		Page pagina;
 		try {
-			String queryString = 	"SELECT model " +
-									"FROM Contrato AS model " +
+			
+			String joinCuotas = ", ContratoNovedadCobro AS model2 ";
+			//if ()
+			
+			String queryString = 	"SELECT DISTINCT model " +
+									"FROM Contrato AS model " + joinCuotas +
 									"	JOIN model.contratoActors AS actorInquilino " +
 									"		WITH actorInquilino.id.idActorTipo = " + ContratoActor.ActorTipoInquilino + " " + 
 									"	JOIN model.contratoActors AS actorPropietarios " +
 									"		WITH actorPropietarios.id.idActorTipo = " + ContratoActor.ActorTipoPropietario + " " +
-									"WHERE model.idContrato IS NOT NULL ";
+									"WHERE model.idContrato IS NOT NULL " +
+									"AND model = model2.contrato ";
 									//"AND UPPER(model.direccionEdificio) LIKE :edificioValue ";
 			
 			if (filtro_inmueble != 0) queryString += " AND model.inmueble.idInmueble = " + filtro_inmueble;
@@ -87,6 +98,10 @@ public class ContratoProcesos {
 			if (filtro_fecha_desde != null) queryString += " AND model.fechaDesde >= :fechaDesde ";
 			if (filtro_fecha_hasta != null) queryString += " AND model.fechaHasta <= :fechaHasta ";
 			
+			if (filtro_fecha_desdeVencimiento != null) queryString += " AND model2.fechaVencimiento >= :fechaDesdeV";													   
+			if (filtro_fecha_hastaVencimiento != null) queryString += " AND model2.fechaVencimiento <= :fechaHastaV";
+			if (cuota_vencimiento != 0) queryString += " AND model2.contratoCuota = " + cuota_vencimiento;
+			
 			queryString+= " ORDER BY model.fechaDesde ";
 			
 			//filtro_calle += "%";			
@@ -95,8 +110,12 @@ public class ContratoProcesos {
 			
 			if (filtro_fecha_desde != null) oQuery.setDate("fechaDesde", filtro_fecha_desde);
 			if (filtro_fecha_hasta != null) oQuery.setDate("fechaHasta", filtro_fecha_hasta);
+
+			if (filtro_fecha_desdeVencimiento != null) oQuery.setDate("fechaDesdeV", filtro_fecha_desdeVencimiento);													   
+			if (filtro_fecha_hastaVencimiento != null) oQuery.setDate("fechaHastaV", filtro_fecha_hastaVencimiento);			
+
 			
-			System.out.println("Query " + oQuery.getQueryString());
+			//System.out.println("Query " + oQuery.getQueryString());
 			
 			pagina = new Page(oQuery, page_number, page_size);
 			
@@ -312,7 +331,7 @@ public class ContratoProcesos {
 		
 		// REGLA 1°
 		Inmueble oInmueble = oContrato.getInmueble();
-		Page pagina = findByFilter(true,oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false);
+		Page pagina = findByFilter(true,oInmueble.getIdInmueble(), 0, 0, 0, 1, null, null, false, false, null, null, 0);
 		List<Contrato> lista = pagina.getList();
 		if(lista.size() > 0) {
 			

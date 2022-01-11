@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import datos.contrato_actor.ContratoActor;
+import datos.contrato_novedad_cobro.ContratoNovedadCobro;
 import datos.facturero.Facturero;
 import datos.inmueble.Inmueble;
 
@@ -48,6 +49,8 @@ public abstract class AbstractContrato implements java.io.Serializable {
 
 	private Set<ContratoActor> contratoActors = new HashSet<ContratoActor>(0);
 
+	private Set<ContratoNovedadCobro> contratoNovedadCobros  = new HashSet<ContratoNovedadCobro>(0);
+	
 	// Constructors
 
 	/** default constructor */
@@ -65,7 +68,8 @@ public abstract class AbstractContrato implements java.io.Serializable {
 			Date fechaDesde, Date fechaHasta, Date fechaExtension, Date fechaRescision,
 			String observaciones, Double monto, Short cantidadCuota,
 			Double comisionPropPorc, Double comisionPropFija,
-			Double comisionInquilino, Date fechaAlta, Set<ContratoActor> contratoActors, Boolean comercial) {
+			Double comisionInquilino, Date fechaAlta, Set<ContratoActor> contratoActors, 
+			Boolean comercial, Set<ContratoNovedadCobro> contratoNovedadCobros) {
 		this.idContrato = idContrato;
 		this.inmueble = inmueble;
 		this.facturero = facturero;
@@ -82,6 +86,7 @@ public abstract class AbstractContrato implements java.io.Serializable {
 		this.fechaAlta = fechaAlta;
 		this.contratoActors = contratoActors;
 		this.comercial = comercial;
+		this.contratoNovedadCobros = contratoNovedadCobros;
 	}
 
 	// Property accessors
@@ -213,5 +218,15 @@ public abstract class AbstractContrato implements java.io.Serializable {
 	public void setComercial(Boolean comercial) {
 		this.comercial = comercial;
 	}
+
+	public Set<ContratoNovedadCobro> getContratoNovedadCobros() {
+		return contratoNovedadCobros;
+	}
+
+	public void setContratoNovedadCobros(Set<ContratoNovedadCobro> contratoNovedadCobros) {
+		this.contratoNovedadCobros = contratoNovedadCobros;
+	}
+	
+	
 
 }

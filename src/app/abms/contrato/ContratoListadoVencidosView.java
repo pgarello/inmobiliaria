@@ -90,7 +90,7 @@ public class ContratoListadoVencidosView extends ABMListadoPrintView {
         	
         	List<Contrato> lContratos = (ContratoProcesos.findByFilter( filtro_vigente, filtro_inmueble, filtro_inquilino, 
         																filtro_propietario, page_number, page_size, filtro_fecha_desde, 
-        																filtro_fecha_hasta, false, false)).getList();
+        																filtro_fecha_hasta, false, false, null, null, 0)).getList();
         	
         	if (lContratos.size() > 0) {
         		//System.out.println("YA RENOVADOOOOOOOO ");

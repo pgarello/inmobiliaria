@@ -283,7 +283,7 @@ public class ImpuestoFiltroView extends ABMListadoFilterView implements FWBusque
 			int id_inquilino = oInquilino.getIdPersona();
 			
 			// busco los Contratos que tienen por inquilino a la persona seleccionada
-	        dataListPage = ContratoProcesos.findByFilter(false,0,id_inquilino,0,0,9, null, null, false, false);	        		
+	        dataListPage = ContratoProcesos.findByFilter(false,0,id_inquilino,0,0,9, null, null, false, false, null, null, 0);	        		
 			
 		} else if (object instanceof Inmueble) {
 			
@@ -307,7 +307,7 @@ public class ImpuestoFiltroView extends ABMListadoFilterView implements FWBusque
 			int id_inmueble = oInmueble.getIdInmueble();
 		
 			/** 1º busco los datos y los cargo en la grilla */
-	        dataListPage = ContratoProcesos.findByFilter(false,id_inmueble,0,0,0,9, null, null, false, false);
+	        dataListPage = ContratoProcesos.findByFilter(false,id_inmueble,0,0,0,9, null, null, false, false, null, null, 0);
 		}
 		
 		oModel = new ContratoListadoModel();
