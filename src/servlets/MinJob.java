@@ -14,15 +14,15 @@ public void run() {
     
 	int minuto = 25;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-	System.out.println(
-			sdf.format(oFecha.getTime()) + 
-			" MinJob trigged by scheduler - " + minuto );
+//	System.out.println(
+//			sdf.format(oFecha.getTime()) + 
+//			" MinJob trigged by scheduler - " + minuto );
 	
-	try {
-		System.out.println(Configuracion.getInstance().getProperty("clave") );
-	} catch(Exception e) {
-		e.printStackTrace();
-	}
+//	try {
+//		System.out.println(Configuracion.getInstance().getProperty("clave") );
+//	} catch(Exception e) {
+//		e.printStackTrace();
+//	}
 
 // Por ahora hago el backup en función de la HORA	
 //	if (oFecha.get(Calendar.MINUTE) == minuto)	

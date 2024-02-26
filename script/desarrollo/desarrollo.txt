@@ -71,9 +71,14 @@ a. 	agrego una novedad genérica a todos los contratos en la que asiento todos es
 	del tipo "Cierre de Contrato" cuando la creo no se el monto, va con monto 0
 b. 	la creo cuando lo necesito, el tema es que no tengo una novedad y la única forma de relacionarlo
 	al recibo con el contrato es a travez de la novedad. No tengo seleccionado un contrato, ya que puede haber
-	novedades de varios contratos.(si el inquilino es el mismo de disintos contratos???) VER SI ES ASÍ
+	novedades de varios contratos.(si el inquilino es el mismo de distintos contratos???) VER SI ES ASÍ
 	
 -------------------------------------------------------------------------------
 03/01/2020
 
 Agregar la leyenda en los RECIBOS DE COBRO cuando queden 3 meses para que finalice el contrato
+
+-------------------------------------------------------------------------------
+04/01/2024
+
+

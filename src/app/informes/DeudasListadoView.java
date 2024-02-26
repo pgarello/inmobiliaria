@@ -35,11 +35,14 @@ public class DeudasListadoView extends ABMListadoPrintView {
 	private FWFiltros refClaseFiltros;
 	
 	public boolean sin_datos = true;
+	
+	private Boolean reporte1;
 
     
     public DeudasListadoView (	short filtro_mes,
     							short filtro_anio,
-    							FWFiltros refClaseFiltros) {
+    							FWFiltros refClaseFiltros,
+    							Boolean reporte1) {
     	
         super(null);
         
@@ -51,6 +54,7 @@ public class DeudasListadoView extends ABMListadoPrintView {
         //this.getTable().addActionListener(this);
         this.filtro_mes = filtro_mes;
         this.filtro_anio = filtro_anio;
+        this.reporte1 = reporte1;
         
         this.limpiarBotoneraEdicion();
         this.agregarBotonImprimir();
@@ -67,36 +71,47 @@ public class DeudasListadoView extends ABMListadoPrintView {
     @SuppressWarnings("unchecked")
 	public void ActualizarDatos() {
     	
-        /** Cargo los datos en la grilla */
-        DeudaListadoModel oModel = new DeudaListadoModel();
-        
-        List<ContratoNovedadCobro> lNovedades = ContratoNovedadCobroProcesos.buscarNovedadesCobroDeuda(filtro_mes, filtro_anio); //, page_number, page_size);
-        
-        // Controlo que la consulta no de vacia
-        if (lNovedades.size() > 0) {
-        
-        	this.sin_datos = false;
-        	//refClaseFiltros.setMensaje("");
-        	
-        	dataList = lNovedades;
-        
-        	oModel.setDataList(dataList);
-        	this.update(oModel);
-        	
-        	this.oTable.setDefaultRenderer(Object.class, randomizingCellRenderer);
-        	
-        } else {
-        	        	
-        	// salgo
-        	// this.actionPerformed(new ActionEvent(this.bExit, "exit"));      	
-        	
-        	// Informo en pantalla que me llamo ¿?
-        	refClaseFiltros.setMensaje("La consulta no devuelve ningún dato.");
-        	
-        	//((CCContentPane) getParent()).remove(this);        	        	
-        	//((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent()).cerrarVentana(this);
-        	
-        }
+    	if (this.reporte1) {
+    	
+	        /** Cargo los datos en la grilla */
+	        DeudaListadoModel oModel = new DeudaListadoModel();
+	        
+	        List<ContratoNovedadCobro> lNovedades = ContratoNovedadCobroProcesos.buscarNovedadesCobroDeuda(filtro_mes, filtro_anio); //, page_number, page_size);
+	        
+	        // Controlo que la consulta no de vacia
+	        if (lNovedades.size() > 0) {
+	        
+	        	this.sin_datos = false;
+	        	//refClaseFiltros.setMensaje("");
+	        	
+	        	dataList = lNovedades;
+	        
+	        	oModel.setDataList(dataList);
+	        	this.update(oModel);
+	        	
+	        	this.oTable.setDefaultRenderer(Object.class, randomizingCellRenderer);
+	        	
+	        } else {
+	        	        	
+	        	// salgo
+	        	// this.actionPerformed(new ActionEvent(this.bExit, "exit"));      	
+	        	
+	        	// Informo en pantalla que me llamo ¿?
+	        	refClaseFiltros.setMensaje("La consulta no devuelve ningún dato.");
+	        	
+	        	//((CCContentPane) getParent()).remove(this);        	        	
+	        	//((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent()).cerrarVentana(this);
+	        	
+	        }
+    	} else {
+    		
+    		//Los PROPIETARIOS a los que no se les pagó en el período.
+    		
+    		
+    		refClaseFiltros.setMensaje("Informe no preparado !!!.");
+    		
+    	}
+    	
         
     }
     
