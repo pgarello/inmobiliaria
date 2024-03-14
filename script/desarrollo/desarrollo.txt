@@ -77,8 +77,12 @@ b. 	la creo cuando lo necesito, el tema es que no tengo una novedad y la única f
 03/01/2020
 
 Agregar la leyenda en los RECIBOS DE COBRO cuando queden 3 meses para que finalice el contrato
-
+PENDIENTE !!!
 -------------------------------------------------------------------------------
-04/01/2024
+14/03/2024
 
+Agregar a los contratos un campo que representa cada cuanto se recalcula el precio
+mensual (por ejemplo cada 3 meses, 4 meses, 6 meses, etc) 
+
+La idea es poder filtrar y determinar cuando hay que reveer el valor del alquiler
 

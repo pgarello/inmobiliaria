@@ -3,7 +3,7 @@ package datos.contrato_novedad_pago;
 import datos.BaseHibernateDAO;
 import datos.SessionFactory;
 import datos.contrato.Contrato;
-
+import datos.contrato_novedad_cobro.ContratoNovedadCobro;
 import datos.persona.Persona;
 
 import java.util.Date;
@@ -94,6 +94,8 @@ public class ContratoNovedadPagoDAO extends BaseHibernateDAO {
 		}
 	}
 
+	
+	
 	public List findByExample(ContratoNovedadPago instance) {
 		log.debug("finding ContratoNovedadPago instance by example");
 		try {
@@ -275,6 +277,45 @@ public class ContratoNovedadPagoDAO extends BaseHibernateDAO {
 		return lNovedades;
 	}
 
+	
+	public static List<ContratoNovedadPago> findByPeriodo(short mes, short anio) {
+		
+		log.debug("ContratoNovedadPagoDAO.findByPeriodo");
+		
+		Session oSessionH = SessionFactory.currentSession();
+
+		List<ContratoNovedadPago> lNovedades = null;
+		//Date fecha_alta = new Date();
+
+		try {
+			String queryString = 	"FROM ContratoNovedadPago AS model " +
+									"WHERE month(model.fechaLiquidacion) = " + mes + " " +
+									"AND year(model.fechaLiquidacion) = " + anio + " " +
+									"ORDER BY model.contrato.inmueble ";
+			Query queryObject = oSessionH.createQuery(queryString);
+			
+//			queryObject.setParameter(0, mes);
+//			queryObject.setParameter(1, anio);
+			
+			lNovedades = queryObject.list();
+			
+			// recorro las relaciones peresozas
+			for(ContratoNovedadPago obj: lNovedades) {
+				obj.getContrato().getInmueble().getLocalidad().getDescripcion();
+				obj.getContrato().getInquilino().getDescripcion();
+			}
+			
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		} finally {
+			oSessionH.close();
+		}		
+		
+		return lNovedades;
+	}
+
+	
 	
 	
 }

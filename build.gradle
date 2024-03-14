@@ -13,7 +13,7 @@ tasks.withType(JavaCompile) {
 }
 
 //version = version
-version='1.0.290'  //version we need to change
+version='1.0.324'  //version we need to change
 
 task incrementrevsion{
         def v = version

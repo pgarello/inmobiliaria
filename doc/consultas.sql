@@ -24,9 +24,9 @@ where fecha_desde <= now()
     and fecha_hasta >= now() -- 151
     and fecha_rescision is null -- 139
     and rci.id_recibo_cobro_item is null -- 2943
-    and cnc.fecha_vencimiento <= '2022-01-01' -- 1274
+    and cnc.fecha_vencimiento <= '2024-01-01' -- 1274
     and cnc.id_novedad_tipo = 1 -- 807
-    and periodo_mes = 6 and periodo_anio = 2021
+    and periodo_mes = 08 and periodo_anio = 2023
 order by cnc.monto desc -- 9
 limit 10
 

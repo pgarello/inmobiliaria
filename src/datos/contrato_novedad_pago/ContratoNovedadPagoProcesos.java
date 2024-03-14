@@ -108,6 +108,58 @@ public class ContratoNovedadPagoProcesos {
 	
 	
 	/**
+	 * Busca las novedades de PAGO en un período
+	 * @param mes
+	 * @param anio
+	 * @return
+	 */
+	public static List<ContratoNovedadPago> buscarNovedadesPagoDeuda(short mes, short anio) {
+		
+		//ver lo de los log !!!!!!!!!!!!!!
+		System.out.println("buscarNovedadesPagoDeuda 1 ");
+		
+		List<ContratoNovedadPago> lista_datos = new Vector<ContratoNovedadPago>();
+		
+		lista_datos = ContratoNovedadPagoDAO.findByPeriodo(mes, anio);
+		
+		// Para que este completa la novedad tendría que sacar el saldo de cada cuota
+		List<ContratoNovedadPago> lista_datos_completa = new Vector<ContratoNovedadPago>();
+		for(ContratoNovedadPago oNovedad: lista_datos) {
+			
+			boolean procesar = true;
+ 
+			// evaluo que el contrato no este ANULADO o RESCINDIDO para esa fecha O SOLO MIRO LOS Q ESTAN VIGENTES
+			// al rescindirse un contrato, toda la DEUDA queda pendiente ¿?¿?¿?¿ NO, solo se borra los movimientos posteriores a la
+			// fecha de rescisión
+			// fecha_desde < hoy < fecha_rescision
+			Calendar hoy = Calendar.getInstance();
+			hoy.set(Calendar.MONTH, mes-1);
+			hoy.set(Calendar.YEAR, anio);
+//			System.out.println("buscarNovedadesCobro con DEUDA " + oNovedad.getContrato().getFechaRescision() + " - " + hoy.getTime());
+//			if (oNovedad.getContrato().getFechaRescision() != null ) {				
+//				procesar = false;
+//			}
+			
+			if (procesar) {
+				oNovedad = completarConSaldo(oNovedad);
+				if (oNovedad.getSaldo() > 0) {
+					// Con deuda
+					lista_datos_completa.add(oNovedad);
+					//System.out.println("CONTROL DE DATOS : " + oNovedad.getMonto() + " - " + oNovedad.getSaldo());
+				}
+			}
+			
+		} // Fin for
+		
+		
+		return lista_datos_completa;
+		
+	}
+
+	
+	
+	
+	/**
 	 * Busca las novedades de cobro de un Alquiler
 	 * @param oInquilino
 	 * @param con_saldo boolean que especifica si quiero todos los movimientos (cuotas) o solo los que tienen deuda

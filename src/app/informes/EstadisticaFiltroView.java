@@ -131,7 +131,7 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
 
         //
         btnInquilino = new CCButton("1º Los INQUILINOS que no pagaron en el período.", iPropietario);
-        this.btnInquilino.setActionCommand("find");        
+        this.btnInquilino.setActionCommand("inquilinos");        
         this.btnInquilino.addActionListener(this);
         ColumnLayoutData cLabelLD1 = new ColumnLayoutData();
         this.btnInquilino.setLayoutData(cLabelLD1);
@@ -224,9 +224,19 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
     	
     }
     
+    public void inquilinos() {
+    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "EstadisticaFiltroView.inquilinos ");
+    	
+    	this.find();
+    	
+    }
+    
+    
 	
     public void find() {
 
+    	Logger.getLogger("Inmobiliaria").log(Level.INFO, "EstadisticaFiltroView.find");
+    	
     	/*
     	 La idea es buscar los datos y pasarselo a la pantalla LISTADO
     	 que tiene que ser una nueva ventana.
@@ -276,11 +286,16 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
             // Limpio los datos de pantalla
         	this.propietarios();
             
-        } 
+        } if (ae.getActionCommand().equals("inquilinos")) {
+        	
+        	// Antes ejecutaba el comando "find"
+        	this.inquilinos();
+        	
+        }
         
-        // Tiro el evento para arriba en la gerarquia de objetos
+    	// Tiro el evento para arriba en la gerarquia de objetos
     	super.actionPerformed(ae);
-        
+        	        
     }
     
     

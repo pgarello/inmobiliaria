@@ -13,7 +13,7 @@ import java.util.List;
 import app.beans.NovedadTipo;
 
 import datos.contrato_novedad_cobro.ContratoNovedadCobro;
-
+import datos.contrato_novedad_pago.ContratoNovedadPago;
 import nextapp.echo2.app.table.AbstractTableModel;
 
 
@@ -50,37 +50,75 @@ public class DeudaListadoModel extends AbstractTableModel {
 	/** Aca va el valor de devolución */
 	public Object getValueAt(int column, int row) {
 		
-		ContratoNovedadCobro currentObject = (ContratoNovedadCobro) dataList.get(row);
-		
-		//SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
-		
-		// Evaluo el propietario por si viene nulo
-		String direccion_inmueble = "", periodo_cuota = "", cliente = "", movimiento = "", rescindido="";
-		try {
-			direccion_inmueble = currentObject.getContrato().getInmueble().getDireccion_completa();
-			periodo_cuota = currentObject.getPeriodoCuota();
-			cliente = currentObject.getContrato().getInquilino().getDescripcion();
-			movimiento = NovedadTipo.getDescripcion(currentObject.getIdNovedadTipo());
-			if (currentObject.getContrato().getFechaRescision() != null)
-				//rescindido = fecha.format(currentObject.getContrato().getFechaRescision());
-				rescindido = "*";
-		} catch(NullPointerException npe) {
-			/** NO TIENE PROPIETARIO ASIGNADO */
+		if ( (dataList.get(row)) instanceof ContratoNovedadCobro )  {
+			ContratoNovedadCobro currentObject = (ContratoNovedadCobro) dataList.get(row);		
+			
+			//SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
+			
+			// Evaluo el INQUILINO por si viene nulo
+			String direccion_inmueble = "", periodo_cuota = "", cliente = "", movimiento = "", rescindido="";
+			try {
+				direccion_inmueble = currentObject.getContrato().getInmueble().getDireccion_completa();
+				periodo_cuota = currentObject.getPeriodoCuota();
+				cliente = currentObject.getContrato().getInquilino().getDescripcion();
+				movimiento = NovedadTipo.getDescripcion(currentObject.getIdNovedadTipo());
+				if (currentObject.getContrato().getFechaRescision() != null)
+					//rescindido = fecha.format(currentObject.getContrato().getFechaRescision());
+					rescindido = "*";
+			} catch(NullPointerException npe) {
+				/** NO TIENE PROPIETARIO ASIGNADO */
+			}
+			
+			DecimalFormat moneda = new DecimalFormat("$###,##0.00");
+			
+	        switch (column) {
+	        	case 0: return row+1;
+	        	case 1: return rescindido;
+	        	case 2: return direccion_inmueble;
+	        	case 3: return periodo_cuota;
+	        	case 4: return movimiento;
+	        	case 5: return cliente;
+	        	case 6: return moneda.format(currentObject.getMonto());
+	        	case 7: return moneda.format(currentObject.getSaldo());
+	        	default: return "error";
+	        }
+		} else {
+			
+			ContratoNovedadPago currentObject = (ContratoNovedadPago) dataList.get(row);		
+			
+			//SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
+			
+			// Evaluo el propietario por si viene nulo
+			String direccion_inmueble = "", periodo_cuota = "", cliente = "", movimiento = "", rescindido="";
+			try {
+				direccion_inmueble = currentObject.getContrato().getInmueble().getDireccion_completa();
+				periodo_cuota = currentObject.getPeriodoCuota();
+				cliente = currentObject.getPersona().getDescripcion();
+				movimiento = NovedadTipo.getDescripcion(currentObject.getIdNovedadTipo());
+				if (currentObject.getContrato().getFechaRescision() != null)
+					//rescindido = fecha.format(currentObject.getContrato().getFechaRescision());
+					rescindido = "*";
+			} catch(NullPointerException npe) {
+				/** NO TIENE PROPIETARIO ASIGNADO */
+			}
+			
+			DecimalFormat moneda = new DecimalFormat("$###,##0.00");
+			
+	        switch (column) {
+	        	case 0: return row+1;
+	        	case 1: return rescindido;
+	        	case 2: return direccion_inmueble;
+	        	case 3: return periodo_cuota;
+	        	case 4: return movimiento;
+	        	case 5: return cliente;
+	        	case 6: return moneda.format(currentObject.getMonto());
+	        	case 7: return moneda.format(currentObject.getSaldo());
+	        	default: return "error";
+	        }
+			
 		}
 		
-		DecimalFormat moneda = new DecimalFormat("$###,##0.00");
 		
-        switch (column) {
-        	case 0: return row+1;
-        	case 1: return rescindido;
-        	case 2: return direccion_inmueble;
-        	case 3: return periodo_cuota;
-        	case 4: return movimiento;
-        	case 5: return cliente;
-        	case 6: return moneda.format(currentObject.getMonto());
-        	case 7: return moneda.format(currentObject.getSaldo());
-        	default: return "error";
-        }
 
 		//return new Integer((column + 1) * (row + 1)); 
 	} 
@@ -93,7 +131,7 @@ public class DeudaListadoModel extends AbstractTableModel {
             case 2: return new String("Dirección");
             case 3: return new String("Periodo");
             case 4: return new String("Movimiento");
-            case 5: return new String("Inquilino");
+            case 5: return new String("Inquilino/Propietario");
             case 6: return new String("Monto");
             case 7: return new String("Saldo");
             default: return new String("ERROR");

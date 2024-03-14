@@ -174,6 +174,7 @@ public class ContratoNovedadCobroProcesos {
 			
 		} // Fin for
 		
+		
 		return lista_datos_completa;
 		
 	}

@@ -9,14 +9,14 @@ where periodo_mes = 6 and periodo_anio = 2013
 and id_novedad_tipo = 2 and monto = 0
 
 
--- SUMATORIA DE COMISIONES $ 24922.20 - lo que debería haber cobrado
+-- SUMATORIA DE COMISIONES $ 24922.20 - lo que deberï¿½a haber cobrado
 select sum(monto)
 from contrato_novedad_pago 
 where periodo_mes = 6 and periodo_anio = 2013
 and id_novedad_tipo = 2
 group by id_novedad_tipo
 
--- Lo que cobré realmente
+-- Lo que cobrï¿½ realmente
 select sum(rpi.monto)
 from recibo_pago_item as rpi
 	join contrato_novedad_pago as cnp on (rpi.id_novedad = cnp.id_contrato_novedad_pago)
@@ -45,12 +45,13 @@ group by periodo_mes, periodo_anio
 order by periodo_anio, periodo_mes
 
 
--- lo que se tenía que liquidar y no se liquido (NOVEDADES vs LIQUIDACIONES)
-select sum(cnp.monto), 
-sum(rpi.monto)
+-- lo que se tenï¿½a que liquidar y no se liquido (NOVEDADES vs LIQUIDACIONES)
+select p.*, cnp.* --sum(cnp.monto), 
+--sum(rpi.monto)
 from contrato_novedad_pago as cnp
+join persona as p using (id_persona)
 left join recibo_pago_item as rpi on (rpi.id_novedad = cnp.id_contrato_novedad_pago and rpi.id_item_tipo = cnp.id_novedad_tipo )
-where periodo_mes = 5 and periodo_anio = 2014
+where periodo_mes = 8 and periodo_anio = 2023 // creo que el mes es +1 => mes 8 es JULIO ?
 and id_novedad_tipo = 2 -- id_item_tipo = 2 
 and id_recibo_pago is null
 

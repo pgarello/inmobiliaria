@@ -16,7 +16,8 @@ import nextapp.echo2.webcontainer.command.BrowserOpenWindowCommand;
 
 import datos.contrato_novedad_cobro.ContratoNovedadCobro;
 import datos.contrato_novedad_cobro.ContratoNovedadCobroProcesos;
-
+import datos.contrato_novedad_pago.ContratoNovedadPago;
+import datos.contrato_novedad_pago.ContratoNovedadPagoProcesos;
 import framework.grales.seguridad.FWUsuario;
 import framework.nr.generales.filtros.FWFiltros;
 
@@ -27,7 +28,7 @@ import framework.ui.principal.FWApplicationInstancePrincipal;
 @SuppressWarnings("serial")
 public class DeudasListadoView extends ABMListadoPrintView {
 	
-	private List<ContratoNovedadCobro> dataList;
+	private List dataList;
 		
 	private short filtro_mes = 0;
 	private short filtro_anio = 0;
@@ -47,7 +48,7 @@ public class DeudasListadoView extends ABMListadoPrintView {
         super(null);
         
         this.refClaseFiltros = refClaseFiltros;
-        this.setTitle("Estadisticas DEUDAS - Listado");
+        this.setTitle("Estadisticas DEUDAS INQUILINOS - Listado");
         this.setWidth(new Extent(800, Extent.PX));
         this.setHeight(new Extent(500, Extent.PX));
         
@@ -59,6 +60,10 @@ public class DeudasListadoView extends ABMListadoPrintView {
         this.limpiarBotoneraEdicion();
         this.agregarBotonImprimir();
         this.agregarBotonExcel();
+        
+        if (!reporte1) {
+        	this.setTitle("Estadisticas DEUDAS PROPIETARIOS - Listado");	
+        }
         
         ActualizarDatos();
                 
@@ -106,9 +111,40 @@ public class DeudasListadoView extends ABMListadoPrintView {
     	} else {
     		
     		//Los PROPIETARIOS a los que no se les pagó en el período.
+    		// Primero levanto los mismos datos que arriba, el listado de CONTRATOS VIGENTES en el PERIODO
+    		// Después evaluo la condición de filtrado
     		
+    		DeudaListadoModel oModel = new DeudaListadoModel();
+	        
+	        List<ContratoNovedadPago> lNovedades = ContratoNovedadPagoProcesos.buscarNovedadesPagoDeuda(filtro_mes, filtro_anio); //, page_number, page_size);    		
     		
-    		refClaseFiltros.setMensaje("Informe no preparado !!!.");
+	        
+	        //Controlo que la consulta no de vacia
+	        if (lNovedades.size() > 0) {
+	        
+	        	this.sin_datos = false;
+	        	//refClaseFiltros.setMensaje("");
+	        	
+	        	dataList = lNovedades;
+	        
+	        	oModel.setDataList(dataList);
+	        	this.update(oModel);
+	        	
+	        	this.oTable.setDefaultRenderer(Object.class, randomizingCellRenderer);
+	        	
+	        } else {
+	        	        	
+	        	// salgo
+	        	// this.actionPerformed(new ActionEvent(this.bExit, "exit"));      	
+	        	
+	        	// Informo en pantalla que me llamo ¿?
+	        	refClaseFiltros.setMensaje("La consulta no devuelve ningún dato.");
+	        	
+	        	//((CCContentPane) getParent()).remove(this);        	        	
+	        	//((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent()).cerrarVentana(this);
+	        	
+	        }
+	        
     		
     	}
     	
