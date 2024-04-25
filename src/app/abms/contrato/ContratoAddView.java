@@ -75,10 +75,11 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
 	
 	private CCLabel lMensaje;
 	private CCLabel lInmueble, lPropietario, lInquilino, lObservaciones, lFecha_desde, lFecha_hasta, lMonto, 
-					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, lComisionPropietario;
+					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, 
+					lComisionPropietario, lMesesRevision;
 	
 	private CCTextField tInmueble, tPropietario, tInquilino, tMonto, tCuotas, tComision_prop_fija, 
-						tComision_prop_porc, tComision_inquilino;
+						tComision_prop_porc, tComision_inquilino, tMesesRevision;
 	
 	CCDateField dfFecha_desde, dfFecha_hasta;
 	
@@ -167,54 +168,59 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
         
         
         /*******************************************************************/       
-        lInmueble = new CCLabel("Inmueble:",22);
+        lInmueble = new CCLabel("Inmueble:",23);
         tInmueble = new CCTextField(300, false);
         tInmueble.setEnabled(false);
                 
-        lPropietario = new CCLabel("Propietario:",22);
+        lPropietario = new CCLabel("Propietario:",23);
         tPropietario = new CCTextField(300,22,20,false);
         tPropietario.setEnabled(false);
         
-        lInquilino = new CCLabel("Inquilino:",22);
+        lInquilino = new CCLabel("Inquilino:",23);
         tInquilino = new CCTextField(300,false);
         tInquilino.setEnabled(false);
         
-        lFecha_desde = new CCLabel("Desde:",22);
+        lFecha_desde = new CCLabel("Desde:",23);
         dfFecha_desde = new CCDateField();
         dfFecha_desde.getTextField().setEnabled(false);
 
-        lFecha_hasta = new CCLabel("Hasta:",22);
+        lFecha_hasta = new CCLabel("Hasta:",23);
         dfFecha_hasta = new CCDateField();
         dfFecha_hasta.getTextField().setEnabled(false);
         
-        lMonto = new CCLabel("Monto Total:",22);
+        lMonto = new CCLabel("Monto Total:",23);
         tMonto = new CCTextField(100,22,20,true);
         tMonto.setText("0,00");
-        tMonto.setRegex("^(-)?(\\d){1,3}(\\.(\\d){3})*(,\\d{1,2})?$");
+        tMonto.setRegex("^(\\d+)(,\\d{1,2})?$"); // ^(d+)(,d{1,2})?$ -- 1 o más decimales , 1 o 2 decimales 
         
-        lCuotas = new CCLabel("Cant. de Cuotas:",22);
+        lCuotas = new CCLabel("Cant. de Cuotas:",23);
         tCuotas = new CCTextField(50,true);
         tCuotas.setText("0");
         tCuotas.setRegex("^[0-9]{1,2}$");
         //tCuotas.setRegex("^[0-9]*$"); // Cantidad ilimitada de digitos
 
-        lComisiones = new CCLabel("Comisiones:",22);
+        lMesesRevision = new CCLabel("Actualización meses:",23);
+        tMesesRevision = new CCTextField(50,22,20,true);;
+        tMesesRevision.setText("0");
+        tMesesRevision.setRegex("^[0-9]{1,2}$");
+        
+        lComisiones = new CCLabel("Comisiones:",23);
         lComisiones.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));
         lVacio = new CCLabel("",22);
         
-        lComision_prop_fija = new CCLabel("Propietario (fija $):",22);
+        lComision_prop_fija = new CCLabel("Propietario (fija $):",23);
         tComision_prop_fija = new CCTextField(100,22,20,true);
-        tComision_prop_fija.setRegex("^(-)?(\\d){1,3}(\\.(\\d){3})*(,\\d{1,2})?$");
+        tComision_prop_fija.setRegex("^(\\d+)(,\\d{1,2})?$");
         tComision_prop_fija.setText("0");
 
-        lComision_prop_porc = new CCLabel("Propietario (%):",22);
+        lComision_prop_porc = new CCLabel("Propietario (%):",23);
         tComision_prop_porc = new CCTextField(100,true);
         tComision_prop_porc.setText("0");
         lComisionPropietario = new CCLabel(".  (10% Por defecto)");
         
-        lComision_inquilino = new CCLabel("Inquilino ($):",22);
+        lComision_inquilino = new CCLabel("Inquilino ($):",23);
         tComision_inquilino = new CCTextField(100,22,20,true);
-        tComision_inquilino.setRegex("^(-)?(\\d){1,3}(\\.(\\d){3})*(,\\d{1,2})?$");
+        tComision_inquilino.setRegex("^(\\d+)(,\\d{1,2})?$");
         tComision_inquilino.setText("0");
         
         lObservaciones = new CCLabel("Observaciones:",22*7);
@@ -267,6 +273,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
         cLabels.add(lFecha_hasta);
         cLabels.add(lMonto);
         cLabels.add(lCuotas);
+        cLabels.add(lMesesRevision);
         
         cLabels.add(lComisiones);
         cLabels.add(lComision_prop_fija);
@@ -284,6 +291,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
         cTexts.add(dfFecha_hasta);
         cTexts.add(tMonto);
         cTexts.add(rCuotas);
+        cTexts.add(tMesesRevision);
         
         cTexts.add(lVacio);
         cTexts.add(tComision_prop_fija);
@@ -373,6 +381,10 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
     	Facturero oFacturero = new Facturero();
     	oFacturero.setIdFacturero(1);
     	oContrato.setFacturero(oFacturero);
+    	
+    	// Agrego los meses de REVISION de contrato
+   		oContrato.setMesesRevision(Short.valueOf(tMesesRevision.getText()));
+   		System.out.println("MESES REVISION:" + tMesesRevision.getText());
     	
     	
     	/* Tengo que armar los datos de las cuotas */
@@ -534,7 +546,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
 			total += oCuota.getValor();
 		}
 		
-		DecimalFormat moneda = new DecimalFormat("###,##0.00");
+		DecimalFormat moneda = new DecimalFormat("##0.00");
 		this.tMonto.setText(moneda.format(total));
 		
 	}

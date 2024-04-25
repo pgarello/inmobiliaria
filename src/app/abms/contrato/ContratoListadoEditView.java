@@ -74,10 +74,10 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
 	
 	private CCLabel lMensaje;
 	private CCLabel lInmueble, lPropietario, lInquilino, lObservaciones, lFecha_desde, lFecha_hasta, lMonto, lFecha_rescision,
-					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, lComercial;
+					lCuotas, lComision_prop_fija, lComision_prop_porc, lComision_inquilino, lVacio, lComisiones, lComercial, lMesesRevision;
 	
 	private CCTextField tInmueble, tPropietario, tInquilino, tMonto, tMonto2, tCuotas, tComision_prop_fija, 
-						tComision_prop_porc, tComision_inquilino;
+						tComision_prop_porc, tComision_inquilino, tMesesRevision;
 	
 	CCDateField dfFecha_desde, dfFecha_hasta, dfFecha_rescision;
 	
@@ -172,37 +172,37 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
         
         
         /*******************************************************************/
-        lInmueble = new CCLabel("Inmueble:",22);
+        lInmueble = new CCLabel("Inmueble:",23);
         tInmueble = new CCTextField(300,22,20,false);
         tInmueble.setEnabled(false);
                 
-        lPropietario = new CCLabel("Propietario:",22);
+        lPropietario = new CCLabel("Propietario:",23);
         tPropietario = new CCTextField(300,false);
         tPropietario.setEnabled(false);
         
-        lInquilino = new CCLabel("Inquilino:",22);
+        lInquilino = new CCLabel("Inquilino:",23);
         tInquilino = new CCTextField(300,22,20,false);
         tInquilino.setEnabled(false);
         
-        lFecha_desde = new CCLabel("Desde:",22);
+        lFecha_desde = new CCLabel("Desde:",23);
         dfFecha_desde = new CCDateField(22);
         dfFecha_desde.setEnabled(false);
 
-        lFecha_hasta = new CCLabel("Hasta:",22);
+        lFecha_hasta = new CCLabel("Hasta:",23);
         dfFecha_hasta = new CCDateField(22);
         dfFecha_hasta.setEnabled(false);
 
-        lFecha_rescision = new CCLabel("Rescisión:",22);
+        lFecha_rescision = new CCLabel("Rescisión:",23);
         dfFecha_rescision = new CCDateField(22);
         dfFecha_rescision.setEnabled(false);
         
-        lMonto = new CCLabel("Monto Total:",22);
+        lMonto = new CCLabel("Monto Total:",23);
         tMonto = new CCTextField(100,22,20,true);
         tMonto.setText("0,00");
         tMonto.setRegex("^(-)?(\\d){1,3}(\\.(\\d){3})*(,\\d{1,2})?$");
         tMonto.setEnabled(false);
         
-        lCuotas = new CCLabel("Cant. de Cuotas:",22);
+        lCuotas = new CCLabel("Cant. de Cuotas:",23);
         //tCuotas = new CCTextField(50,22,20,true);
         tCuotas = new CCTextField(50,true);
         tCuotas.setText("0");
@@ -218,22 +218,28 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
         lComercial = new CCLabel("Contrato COMERCIAL",22);
         chComercial = new CCCheckBox("", 22);
 
+        lMesesRevision = new CCLabel("Meses Revisión:",23);
+        tMesesRevision = new CCTextField(50,true);
+        tMesesRevision.setText("0");
+        tMesesRevision.setRegex("^[0-9]{1,2}$");
+        tMesesRevision.setEnabled(false);
+        
    /* ---------------------------------- */
         
         lComisiones = new CCLabel("Comisiones:",22);
         lComisiones.setFont(new Font(Font.VERDANA, Font.BOLD, new Extent(12, Extent.PX)));
         lVacio = new CCLabel("",22);
         
-        lComision_prop_fija = new CCLabel("Propietario (fija $):",22);
+        lComision_prop_fija = new CCLabel("Propietario (fija $):",23);
         tComision_prop_fija = new CCTextField(100,22,20,true);
         tComision_prop_fija.setEnabled(false);
 
-        lComision_prop_porc = new CCLabel("Propietario (%):",22);
+        lComision_prop_porc = new CCLabel("Propietario (%):",23);
         tComision_prop_porc = new CCTextField(100,22,20,true);
         tComision_prop_porc.setText("0");
         tComision_prop_porc.setEnabled(false);
         
-        lComision_inquilino = new CCLabel("Inquilino ($):",22);
+        lComision_inquilino = new CCLabel("Inquilino ($):",23);
         tComision_inquilino = new CCTextField(100,22,20,true);
         tComision_inquilino.setEnabled(false);
         
@@ -303,6 +309,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
         cLabels.add(lMonto);
         cLabels.add(lCuotas);
         cLabels.add(lComercial);
+        cLabels.add(lMesesRevision);
         
         cLabels.add(lComisiones);
         cLabels.add(lComision_prop_fija);
@@ -323,6 +330,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
         cTexts.add(tMonto);
         cTexts.add(rCuotas);
         cTexts.add(chComercial);
+        cTexts.add(tMesesRevision);
         
         cTexts.add(lVacio);
         cTexts.add(tComision_prop_fija);
@@ -368,6 +376,8 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
 		
 		tCuotas.setText(""+oContrato.getCantidadCuota());
 		chComercial.setSelected(oContrato.getComercial());
+		
+		tMesesRevision.setText(""+oContrato.getMesesRevision());
 		
 		tComision_prop_fija.setText(moneda.format(oContrato.getComisionPropFija()));
 		tComision_prop_porc.setText(moneda.format(oContrato.getComisionPropPorc()));

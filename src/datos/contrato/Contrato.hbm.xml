@@ -54,6 +54,11 @@
   <property generated="never" lazy="false" name="comercial" type="java.lang.Boolean">
    <column name="comercial" not-null="true"/>
   </property>
+    <property generated="never" lazy="false" name="mesesRevision" type="java.lang.Short">
+   <column name="meses_revision"/>
+  </property>
+  
+  
   <set inverse="true" name="contratoActors" sort="unsorted">
    <key>
     <column name="id_contrato" not-null="true"/>
@@ -67,8 +72,7 @@
           <column name="id_contrato" not-null="true" />
       </key>
       <one-to-many class="datos.contrato_novedad_cobro.ContratoNovedadCobro" />
-  </set>
-  
+  </set>  
   
  </class>
 </hibernate-mapping>

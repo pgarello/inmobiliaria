@@ -86,3 +86,6 @@ mensual (por ejemplo cada 3 meses, 4 meses, 6 meses, etc)
 
 La idea es poder filtrar y determinar cuando hay que reveer el valor del alquiler
 
+Debemos agregar una nueva columna a la tabla: contrato.meses_revision
+Representa cada cuantos meses se va a REVISAR el precio del alquiler.
+

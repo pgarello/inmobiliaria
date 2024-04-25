@@ -47,11 +47,12 @@ public class Contrato extends AbstractContrato implements java.io.Serializable {
 			Date fechaHasta, Date fechaExtension, Date fechaRescision, String observaciones,
 			Double monto, Short cantidadCuota, Double comisionPropPorc,
 			Double comisionPropFija, Double comisionInquilino, Date fechaAlta,
-			Set<ContratoActor> contratoActors, Boolean comercial, Set<ContratoNovedadCobro> contratoNovedadCobros) {
+			Set<ContratoActor> contratoActors, Boolean comercial, Set<ContratoNovedadCobro> contratoNovedadCobros,
+			Short mesesRevision) {
 		
 		super(idContrato, inmueble, facturero, fechaDesde, fechaHasta, fechaExtension, fechaRescision,
 				observaciones, monto, cantidadCuota, comisionPropPorc,
-				comisionPropFija, comisionInquilino, fechaAlta, contratoActors, comercial, contratoNovedadCobros);
+				comisionPropFija, comisionInquilino, fechaAlta, contratoActors, comercial, contratoNovedadCobros, mesesRevision);
 	}
 	
 	/**
