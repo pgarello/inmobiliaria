@@ -42,7 +42,7 @@ public class ContratoCuotaModel extends AbstractTableModel {
 	
 	/** Cantidad de Columnas */
 	public int getColumnCount() { 
-		return 4; 
+		return 5; 
 	} 
 	
 	/** Cantidad de Filas */
@@ -86,7 +86,7 @@ public class ContratoCuotaModel extends AbstractTableModel {
         	case 1: return periodo;
         	case 2: return fecha.format(currentObject.getFecha_vencimiento());
         	case 3: return moneda.format(currentObject.getValor());
-        	
+        	case 4: return currentObject.seDebeRevisarMonto();
 //        	
 //        	case 3:
 //        		// Si viene la fila 0 inicializo el acumulador
@@ -115,6 +115,7 @@ public class ContratoCuotaModel extends AbstractTableModel {
             case 1: return new String("Periodo");
             case 2: return new String("Vencimiento");
             case 3: return new String("Monto");
+            case 4: return new String("ACTUALIZAR");
 //            case 4: return new String("Saldo");
 //            case 5: return new String("Vencimiento");
             default: return new String("ERROR");

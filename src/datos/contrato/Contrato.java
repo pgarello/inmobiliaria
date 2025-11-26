@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import com.ibm.icu.util.Calendar;
+
 import app.beans.Cuota;
 import app.beans.NovedadTipo;
 import datos.contrato_actor.ContratoActor;
@@ -139,9 +141,9 @@ public class Contrato extends AbstractContrato implements java.io.Serializable {
 					Date fecha_vencimiento = oNovedad.getFechaVencimiento();
 					
 					double saldo = oNovedad.getSaldo();
-					double pagado = oNovedad.getPagado();								
+					double pagado = oNovedad.getPagado();
 					
-					Cuota oCuota = new Cuota(cuota, monto_cuota, periodo_mes, periodo_anio, fecha_vencimiento);
+					Cuota oCuota = new Cuota(cuota, monto_cuota, periodo_mes, periodo_anio, fecha_vencimiento, this);
 				
 					oCuota.setSaldo(saldo);
 					oCuota.setPagado(pagado);
@@ -154,6 +156,38 @@ public class Contrato extends AbstractContrato implements java.io.Serializable {
 		
 		return lCuotas;
 	}
+
+	
+	public List<Cuota> getCuotasPlana() {
+
+		//if (lCuotas == null) {
+			
+			lCuotas = new Vector<Cuota>(); 
+		
+			List<ContratoNovedadCobro> dataListPago = ContratoNovedadCobroProcesos.buscarNovedadesCobroPorContrato(this, false, false);
+			
+			for(ContratoNovedadCobro oNovedad: dataListPago) {
+				
+				if (oNovedad.getIdNovedadTipo() == NovedadTipo.Alquiler) {
+				
+					short cuota = oNovedad.getContratoCuota();
+					double monto_cuota = oNovedad.getMonto();
+					short periodo_mes = oNovedad.getPeriodoMes();
+					short periodo_anio = oNovedad.getPeriodoAnio();
+					Date fecha_vencimiento = oNovedad.getFechaVencimiento();
+										
+					Cuota oCuota = new Cuota(cuota, monto_cuota, periodo_mes, periodo_anio, fecha_vencimiento, this);
+									
+					lCuotas.add(oCuota);
+				}
+				
+			}
+		//}
+		
+		return lCuotas;
+	}
+
+	
 	
 	/**
 	 * Busca el número de cuota dentro del contrato
@@ -202,6 +236,88 @@ public class Contrato extends AbstractContrato implements java.io.Serializable {
 	public String toString() {
 		return "idContrato:"+this.getIdContrato();
 	}
-	
+
+	/**
+	 * Devuelve si es necesario revisar el valor del ALQUILER de este mes
+	 * @param cuota
+	 * @return
+	 */
+	public boolean seDebeRevisarMontoCuota(Cuota oCuota) {
 		
+		System.out.println("Contrato.seDebeRevisarMontoCuota " + oCuota.getPeriodo_anio() + " - " + oCuota.getPeriodo_mes());
+		
+		boolean respuesta = false;
+		
+		// hay que evaluar el número de cuota en función de cada cuanto se debe revisar
+		// por ejemplo si estoy en la cuota 12 y se actualiza cada 4 meses => 12 % 4 = 0
+		// en cambio si estoy en la cuota 11 => 11 % 4 = 3
+		if (this.getMesesRevision() != null && this.getMesesRevision() != 0) {
+			
+			System.out.println("Contrato.seDebeRevisarMontoCuota - " + 
+			(oCuota.getCuota() % this.getMesesRevision()) + " // " + this.getMesesRevision() + " // "  + oCuota.getCuota());
+			
+			if ( (oCuota.getCuota() % this.getMesesRevision()) == 0 )
+				respuesta = true;
+		}
+		
+		return respuesta;
+	}
+
+	
+	public boolean seDebeRevisarMontoCuota() {
+		
+		return this.seDebeRevisarMontoCuota(this.getCuotaVigente());
+		
+	}
+	
+
+	public boolean esContratoVigente() {
+		boolean respuesta = false;
+		
+		Calendar hoy = Calendar.getInstance();
+		// after: despues
+		// before: antes
+		if (this.getFechaDesde().before(hoy.getTime()) && this.getFechaHasta().after(hoy.getTime()) )
+			respuesta = true;
+		
+		return respuesta;
+	}
+	
+	
+	/**
+	 * Busca la cuota VIGENTE al día de la fecha dentro del contrato
+	 * puede devolver NULL por que no tiene cuota vigente
+	 * Podría evaluar q sea un contrato VIGENTE
+	 * @return objeto Cuota
+	 */
+	public Cuota getCuotaVigente() {
+		
+		System.out.println("Contrato.getCuotaVigente()");
+		
+		Cuota oCuota = null;			
+		
+		// Devo validar el contrato esté VIGENTE !!!
+		if ( ! this.esContratoVigente() ) {
+			throw new RuntimeException("El contrato debe ser VIGENTE");
+		}
+		
+		Iterator<Cuota> lista_datos = this.getCuotas().iterator();
+		while (lista_datos.hasNext() && oCuota == null) {
+			Cuota oCuota_ = lista_datos.next();
+			
+			Calendar hoy = Calendar.getInstance();	
+			
+			System.out.println("DATOS 1:" + oCuota_.getPeriodo_anio() + " - " + hoy.get(Calendar.YEAR));
+			System.out.println("DATOS 2:" + oCuota_.getPeriodo_mes() + " - " + (hoy.get(Calendar.MONTH) + 1) );
+			
+			if (oCuota_.getPeriodo_anio() == hoy.get(Calendar.YEAR) && oCuota_.getPeriodo_mes() == ( hoy.get(Calendar.MONTH) + 1) ) {
+				oCuota = oCuota_;
+			}
+		}
+		
+		return oCuota;
+		
+	}
+	
+	
 }

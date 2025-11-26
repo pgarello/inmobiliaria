@@ -62,9 +62,13 @@ public class ContratoNovedadCobroProcesos {
 			}
 			
 			if (procesar) {
+				
+				// Este proceso es muy costoso ... ver si se puede reemplazar por otro ON-DEMAND
 				oNovedad = completarConSaldo(oNovedad);
-				completarConPagado(oNovedad);
+				completarConPagado(oNovedad);				
+				
 				if (con_saldo) {
+											
 					if (oNovedad.getSaldo() > 0) {
 						// Con deuda
 						lista_datos_completa.add(oNovedad);		

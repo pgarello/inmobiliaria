@@ -52,7 +52,7 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
     CCDateField dfFecha_desde, dfFecha_hasta;
 	CCCheckBox cbFecha_desde, cbFecha_hasta;
 	
-	private CCButton btnPropietario, btnInquilino;
+	private CCButton btnPropietario, btnInquilino, btnRevision;
 	private ImageReference iPropietario = new ResourceImageReference("/resources/crystalsvg22x22/actions/run.png");
 	
     private FWContentPanePrincipal CPPrincipal;
@@ -136,6 +136,13 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
         ColumnLayoutData cLabelLD1 = new ColumnLayoutData();
         this.btnInquilino.setLayoutData(cLabelLD1);
                 
+        //
+        btnRevision = new CCButton("3º CONTRATOS a revisar en el período.", iPropietario);
+        this.btnRevision.setActionCommand("revisar");        
+        this.btnRevision.addActionListener(this);
+        ColumnLayoutData cLabelLD3 = new ColumnLayoutData();
+        this.btnRevision.setLayoutData(cLabelLD3);
+
         
         /*******************************************************************/
         rBotonesProcesos = new CCRow();
@@ -189,6 +196,7 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
         cBotonesProcesos.add(lMensaje1);        
         cBotonesProcesos.add(btnInquilino);
         cBotonesProcesos.add(btnPropietario);
+        cBotonesProcesos.add(btnRevision);
         // -----------------------------------------------------------
         
         rMensaje.add(lMensaje);
@@ -286,11 +294,14 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
             // Limpio los datos de pantalla
         	this.propietarios();
             
-        } if (ae.getActionCommand().equals("inquilinos")) {
+        } else if (ae.getActionCommand().equals("inquilinos")) {
         	
         	// Antes ejecutaba el comando "find"
         	this.inquilinos();
-        	
+        
+        } else if (ae.getActionCommand().equals("revisar")) {
+        
+        	this.revisar();
         }
         
     	// Tiro el evento para arriba en la gerarquia de objetos
@@ -299,6 +310,14 @@ public class EstadisticaFiltroView extends ABMListadoFilterView implements FWBus
     }
     
     
+	private void revisar() {
+		/* Tengo que revisar 
+		1º todos los contratos vigentes en el periodo del filtro
+		2º evaluar si hay que revisar el monto de la cuota
+		*/
+		
+	}
+
 	public void setResultado(Object object) {}
     
 	public void clear() {

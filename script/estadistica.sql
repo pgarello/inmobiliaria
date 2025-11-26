@@ -12,21 +12,25 @@ and id_novedad_tipo = 2 and monto = 0
 -- SUMATORIA DE COMISIONES $ 24922.20 - lo que deber�a haber cobrado
 select sum(monto)
 from contrato_novedad_pago 
-where periodo_mes = 6 and periodo_anio = 2013
+where periodo_mes = 5 and periodo_anio = 2024
 and id_novedad_tipo = 2
 group by id_novedad_tipo
+
+--  MES MAYO 2024 $ 1.534.938,62
 
 -- Lo que cobr� realmente
 select sum(rpi.monto)
 from recibo_pago_item as rpi
 	join contrato_novedad_pago as cnp on (rpi.id_novedad = cnp.id_contrato_novedad_pago)
-where periodo_mes = 2 and periodo_anio = 2016
+where periodo_mes = 5 and periodo_anio = 2024
 and id_item_tipo = 2
 group by id_item_tipo
 
+-- MES DE MAYO 2024 $1.530.184,62
+
 -- TODO EN UNO y las diferencias
 select periodo_mes, periodo_anio, 
-	(sum(rpi.monto) * -1) as cobrado, 
+	CAST ( (sum(rpi.monto) * -1) AS MONEY) as cobrado, 
 	(sum(cnp.monto)*-1) as cobrar, 
 	(sum(rpi.monto) - sum(cnp.monto)) as dif
 from contrato_novedad_pago as cnp
@@ -44,6 +48,13 @@ where id_novedad_tipo = 2
 group by periodo_mes, periodo_anio
 order by periodo_anio, periodo_mes
 
+-- Que me muestre el ingreso por comisiones de CONTRATO -- VERIFICAR ????
+select periodo_mes, periodo_anio, sum(monto)
+from contrato_novedad_cobro 
+where id_novedad_tipo = 3
+group by periodo_mes, periodo_anio
+order by periodo_anio, periodo_mes
+
 
 -- lo que se ten�a que liquidar y no se liquido (NOVEDADES vs LIQUIDACIONES)
 select p.*, cnp.* --sum(cnp.monto), 
@@ -57,12 +68,25 @@ and id_recibo_pago is null
 
 
 -- Cuanto COBRE recibo cobranza
-select sum(rpi.monto)--,id_item_tipo
+select CAST (sum(rpi.monto) AS MONEY),id_item_tipo
 from recibo_cobro_item as rpi
 	left join contrato_novedad_cobro as cnp on (rpi.id_novedad = cnp.id_contrato_novedad_cobro)
-where periodo_mes = 5 and periodo_anio = 2014
+where periodo_mes = 5 and periodo_anio = 2024
 --and id_item_tipo = 2
 group by id_item_tipo
+
+/*
+1	ALQUILER	Alq
+2	COMISION ALQUILER	CAlq
+3	COMISION CONTRATO	CCto
+4	COMISION VENTA	CVta
+5	IMPUESTO	Imp
+7	INTERES	Int
+8	VARIOS	Var
+6	IVA	IVA
+9	COMISION RESCISION	CRes
+10	RETENCION GANANCIAS	RGan
+*/
 
 -- NECESITO SABER QUE PAGUE Y NO COBRE
 

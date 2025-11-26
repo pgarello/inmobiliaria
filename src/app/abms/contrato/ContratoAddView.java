@@ -56,6 +56,7 @@ import framework.ui.principal.FWContentPanePrincipal;
 @SuppressWarnings("serial")
 public class ContratoAddView extends ABMAddView implements FWBusquedas, iContratoCuotas {
 	
+	private Contrato oContrato;
 	
     private ImageReference iInmueble = new ResourceImageReference("/resources/crystalsvg22x22/actions/gohome.png");
     private CCButton btnInmueble;
@@ -361,7 +362,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
         /********************************************************************/
     	/** Levanto los valores ingresados 									*/
         /********************************************************************/
-    	Contrato oContrato = new Contrato();
+    	this.oContrato = new Contrato();
     	
     	oContrato.setInmueble(oInmueble);
     	
@@ -414,7 +415,7 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
 				periodo_mes = (short) (oFecha.get(Calendar.MONTH) + 1);
 				periodo_anio = (short) oFecha.get(Calendar.YEAR);
 				
-				Cuota oCuota = new Cuota(i, monto_cuota, periodo_mes, periodo_anio, oFecha.getTime());
+				Cuota oCuota = new Cuota(i, monto_cuota, periodo_mes, periodo_anio, oFecha.getTime(), oContrato);
 				
 				vCuotas.add(oCuota);
 				
@@ -554,6 +555,12 @@ public class ContratoAddView extends ABMAddView implements FWBusquedas, iContrat
 	// Limpio los datos ingresados
 	public void doLimpiar() {
 		this.vCuotas = new Vector<Cuota>();
+	}
+
+
+	@Override
+	public Contrato getContrato() {
+		return this.oContrato;
 	}
 	
 }

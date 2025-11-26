@@ -9,11 +9,11 @@ and comision_prop_porc > 0 --3
 -- 2 216 registros	218							224				227				213
 -- 3 196 registros	198 (sobre estos se cobra)	203				206				190
 
--- Suma de lo que se cobró de comisiones de contrato en un período de tiempo
+-- Suma de lo que se cobrï¿½ de comisiones de contrato en un perï¿½odo de tiempo
 select sum(monto)
 from recibo_cobro as rc
 join recibo_cobro_item as rci on (rc.id_recibo_cobro = rci.id_recibo_cobro)
-where fecha_emision >= '2016-01-01' and fecha_emision < '2017-01-01'
+where fecha_emision >= '2024-01-01' and fecha_emision < '2025-01-01'
 and id_item_tipo = 3 -- comision contrato (INQUILINO)
 
 -- 2013 $  65.753,74
@@ -23,6 +23,8 @@ and id_item_tipo = 3 -- comision contrato (INQUILINO)
 -- 2017 $ 683.707,48
 -- 2018 $ 561.248,49
 -- 2019 $ 572.715,65 (parcial)
+-- 2024 $ 7.356.300 (parcial)
+
 
 select sum(monto) * -1
 from recibo_pago as rc
@@ -37,3 +39,17 @@ and id_item_tipo = 2 -- comision alquiler (PROPIETARIO)
 -- 2017 $   964.097,21
 -- 2018 $ 1.179.347,35
 -- 2019 $   923.772,21
+
+
+select CAST(sum(monto) AS MONEY), --date_trunc('month', fecha_emision),
+max(to_char(fecha_emision,'Mon')) as mon,
+max(extract(year from fecha_emision)) as yyyy
+from recibo_cobro as rc
+join recibo_cobro_item as rci on (rc.id_recibo_cobro = rci.id_recibo_cobro)
+where fecha_emision >= '2024-01-01' and fecha_emision < '2025-01-01'
+and id_item_tipo = 3 -- comision contrato (INQUILINO)
+group by date_trunc('month', fecha_emision)
+-- $3.477.703
+
+-- $ 1.860.403,00	Mayo	2024
+

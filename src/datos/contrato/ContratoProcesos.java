@@ -38,6 +38,7 @@ public class ContratoProcesos {
 
 	/**
 	 * Busca los datos de Contrato
+	 * (Valor 0 cuando no quiero aplicar el filtro por un parámtro entero)
 	 * @param filtro_vigente true: si busco los contratos vigentes a la fecha
 	 * @param filtro_inmueble el id del inmueble
 	 * @param filtro_inquilino el id de la persona
@@ -189,6 +190,39 @@ public class ContratoProcesos {
 		
 		return lista_datos;
 	} 
+	
+
+	@SuppressWarnings("unchecked")
+	public static List<Contrato> findRevisar() {
+
+		Session oSessionH = SessionFactory.currentSession();
+		System.out.println("ContratoProcess.findRevisar()");		
+		List<Contrato> lista_datos = new Vector<Contrato>();
+
+		try {
+			
+			String queryString = 	
+					"SELECT model " +
+					"FROM Contrato AS model " +
+					"WHERE " +
+					" now() BETWEEN model.fechaDesde AND model.fechaHasta " + // VIGENTES
+					" AND now() <= COALESCE(model.fechaRescision, now()) " + // NO RESCINDIDO
+					" AND model.mesesRevision IS NOT NULL " +
+					" ORDER BY model.fechaHasta ";
+						
+			Query oQuery = oSessionH.createQuery(queryString);
+			lista_datos = oQuery.list();
+			
+		} catch (RuntimeException re) {
+			throw re;
+		} finally {
+			oSessionH.close();
+		}		
+
+		return lista_datos;
+	} 
+
+	
 	
 	
 	

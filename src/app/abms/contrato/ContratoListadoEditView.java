@@ -194,7 +194,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
 
         lFecha_rescision = new CCLabel("Rescisión:",23);
         dfFecha_rescision = new CCDateField(22);
-        dfFecha_rescision.setEnabled(false);
+        //dfFecha_rescision.setEnabled(false);
         
         lMonto = new CCLabel("Monto Total:",23);
         tMonto = new CCTextField(100,22,20,true);
@@ -219,10 +219,10 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
         chComercial = new CCCheckBox("", 22);
 
         lMesesRevision = new CCLabel("Meses Revisión:",23);
-        tMesesRevision = new CCTextField(50,true);
+        tMesesRevision = new CCTextField(50,22,20,true);
         tMesesRevision.setText("0");
         tMesesRevision.setRegex("^[0-9]{1,2}$");
-        tMesesRevision.setEnabled(false);
+        //tMesesRevision.setEnabled(false);
         
    /* ---------------------------------- */
         
@@ -377,7 +377,10 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
 		tCuotas.setText(""+oContrato.getCantidadCuota());
 		chComercial.setSelected(oContrato.getComercial());
 		
-		tMesesRevision.setText(""+oContrato.getMesesRevision());
+		if (oContrato.getMesesRevision() != null)
+			tMesesRevision.setText(""+oContrato.getMesesRevision());
+		else
+			tMesesRevision.setText("0");
 		
 		tComision_prop_fija.setText(moneda.format(oContrato.getComisionPropFija()));
 		tComision_prop_porc.setText(moneda.format(oContrato.getComisionPropPorc()));
@@ -397,6 +400,7 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
     	
     	oContrato.setObservaciones(tObservaciones.getText());
     	oContrato.setComercial(chComercial.isSelected());
+    	oContrato.setMesesRevision(Short.parseShort( tMesesRevision.getText() ));
     	
     	try {
     		ContratoFacade.update(oContrato);
@@ -511,6 +515,12 @@ public class ContratoListadoEditView extends ABMListadoEditViewExit implements i
     	Log.debug("Datos del contrato: " + moneda.format(oContrato.getMontoCuotas()));        
         tMonto2.setText(moneda.format(oContrato.getMontoCuotas()));
 
+	}
+
+
+	@Override
+	public Contrato getContrato() {
+		return this.oContrato;
 	}
 
 }

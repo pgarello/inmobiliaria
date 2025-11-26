@@ -75,6 +75,8 @@ public class FWContentPanePrincipal extends CCContentPane {
   */      
         this.abrirVentana("app.abms.contrato.ContratoListadoVencidosView");
         
+        this.abrirVentana("app.abms.contrato.ContratoListadoRevisarView");
+        
         nextPosition = 0;
         
     }

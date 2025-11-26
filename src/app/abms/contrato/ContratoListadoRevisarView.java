@@ -1,14 +1,16 @@
 package app.abms.contrato;
 
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import ccecho2.complex.MessageWindowPane;
-
 import nextapp.echo2.app.ApplicationInstance;
 import nextapp.echo2.app.Color;
-import nextapp.echo2.app.Command;
+
 import nextapp.echo2.app.Component;
 import nextapp.echo2.app.Extent;
 import nextapp.echo2.app.Label;
@@ -17,33 +19,30 @@ import nextapp.echo2.app.event.ActionEvent;
 import nextapp.echo2.app.layout.TableLayoutData;
 import nextapp.echo2.app.list.ListSelectionModel;
 import nextapp.echo2.app.table.TableCellRenderer;
-import nextapp.echo2.webcontainer.command.BrowserOpenWindowCommand;
+
 
 import datos.contrato.Contrato;
 import datos.contrato.ContratoProcesos;
 
-import framework.grales.seguridad.FWUsuario;
 
 import framework.ui.generales.abms.ABMListadoPrintView;
-//import framework.ui.generales.abms.ABMListadoView;
-import framework.ui.principal.FWApplicationInstancePrincipal;
+import framework.ui.principal.FWContentPanePrincipal;
+
 
 @SuppressWarnings("serial")
-public class ContratoListadoVencidosView extends ABMListadoPrintView {
+public class ContratoListadoRevisarView extends ABMListadoPrintView {
 	
 	private List<Contrato> dataList;
-	public boolean sin_datos = true;
-	
+	public boolean sin_datos = true;	
     
-    //public ContratoListadoVencidosView (Boolean selectorFecha) {
-	public ContratoListadoVencidosView () {
+	public ContratoListadoRevisarView () {
     	
         super(null);
         
-        this.setTitle("Contratos Por Vencer");
-        this.setWidth(new Extent(800, Extent.PX));
-        this.setHeight(new Extent(450, Extent.PX));
-               
+        this.setTitle("Contratos para REVISAR por indexación mensual");               		    		    
+		this.setWidth(new Extent(800, Extent.PX));        
+		this.setHeight(new Extent(600, Extent.PX));
+              
         // Solamente es para que visualice
         this.setModal(false);
         
@@ -63,42 +62,27 @@ public class ContratoListadoVencidosView extends ABMListadoPrintView {
         /** Cargo los datos en la grilla */
     	
         ContratoListadoVencidosModel oModel = new ContratoListadoVencidosModel();
-        dataList = ContratoProcesos.findPorVencer();
+        List<Contrato> dataList_aux = ContratoProcesos.findRevisar();
         
         try {
-			dataList = ContratoProcesos.completar(dataList);
+			dataList_aux = ContratoProcesos.completar(dataList_aux);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        
-		// Evaluo si hay algún contrato que ya no tenga cargada una renovación, para que sea una renovación tiene que ser
-		// la misma propiedad y el mismo inquilino ademas de diferir en la fecha, debe ser posterior al de la lista.
-        for (Contrato oContrato : dataList) {
-        	int filtro_inmueble = oContrato.getInmueble().getIdInmueble();
-        	int filtro_inquilino = oContrato.getInquilino().getIdPersona();
-        	boolean filtro_vigente = false;
-        	int filtro_propietario = 0;
-        	int page_number = 0;
-        	int page_size = 1;
+                        
+        /*
+         * 1º tengo que buscar las cuotas de este mes
+         * 2º después tengo que ver si esa cuota corresponde a un mes a revisar 
+         */        
+        dataList = new ArrayList<Contrato>();
+        for (Contrato oContrato : dataList_aux) {
         	
-        	Calendar fechaDesde1 = Calendar.getInstance();
-        	fechaDesde1.setTime(oContrato.getFechaHasta());
-        	fechaDesde1.add(Calendar.DATE, 1);
-        	Date filtro_fecha_desde = fechaDesde1.getTime();
-        	
-        	Date filtro_fecha_hasta = null;
-        	
-        	List<Contrato> lContratos = (ContratoProcesos.findByFilter( filtro_vigente, filtro_inmueble, filtro_inquilino, 
-        																filtro_propietario, page_number, page_size, filtro_fecha_desde, 
-        																filtro_fecha_hasta, false, false, null, null, 0)).getList();
-        	
-        	if (lContratos.size() > 0) {
-        		//System.out.println("YA RENOVADOOOOOOOO ");
-        		oContrato.setYaRenovado(true);
-        	}        	
+        	if (oContrato.seDebeRevisarMontoCuota())
+        		dataList.add(oContrato);
         	
         }
-           
+        System.out.println("Cantidad de CONTRATOS a REVISAR:" + dataList.size() + " // " + dataList_aux.size());
+        
     	//oModel.setDataList(dataList);
     	//this.update(oModel, 0, 0);
         	
@@ -166,7 +150,7 @@ public class ContratoListadoVencidosView extends ABMListadoPrintView {
     
     /* Si quiero usar polimorfismo del método */
     public void actionPerformed(ActionEvent e) {
-    	
+    	    	    	
     	if (e.getActionCommand().equals("new")){            
         	
     		/** Inserción -------------------------------------------- */
@@ -197,61 +181,47 @@ public class ContratoListadoVencidosView extends ABMListadoPrintView {
     		
     		this.doPrint();
     		
-    	}
+    	} else if (e.getActionCommand().equals("exit")){
+        	
+//    		System.out.println("pantalla 2 " + GraphicsEnvironment.isHeadless());
+//    		
+//    		((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent())
+//    		
+//    		//if (!GraphicsEnvironment.isHeadless()) {
+//                // Obtener el tamaño de la pantalla
+//                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//
+//                System.out.println("pantalla 2 " + screenSize.width + " x " + screenSize.height);
+//                
+//                // Establecer el tamaño de la ventana en un porcentaje del tamaño de la pantalla
+//                int porcentajeAncho = 80; // Porcentaje del ancho de la pantalla
+//                int porcentajeAlto = 80; // Porcentaje del alto de la pantalla
+//                int ancho = (int) (screenSize.width * porcentajeAncho / 100);
+//                int alto = (int) (screenSize.height * porcentajeAlto / 100);
+//                this.setWidth(new Extent(ancho));
+//                this.setHeight(new Extent(alto));
+//            //} 
+//    		//((FWContentPanePrincipal) ApplicationInstance.getActive().getDefaultWindow().getContent()).cerrarVentana(this);
+//            //((CCContentPane) getParent()).remove(this);
+        } 
     	
-    	// Tiro el evento para arriba en la gerarquia de objetos
-    	super.actionPerformed(e);
+        // Tiro el evento para arriba en la gerarquia de objetos
+        super.actionPerformed(e);
+        
     	
     }
     
     
-    public void doDelete() {
-    	
-    	/**
-    	 * Las reglas de negocio están en la capa de PERSISTENCIA
-    	 */
-    	
-        // elimino el registro actual        
-    	int currentRow = this.getTable().getSelectionModel().getMinSelectedIndex();
-        
-        Contrato oContrato = dataList.get(currentRow);
-        
-        // Borrar
-    	try {
-    		ContratoProcesos.delete(oContrato);
-    		
-    		// Actualizo la tabla
-        	ActualizarDatos();
-        	
-        	new MessageWindowPane("Se ha borrado el CONTRATO en forma exitosa.");
-        	
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    		new MessageWindowPane(e.getMessage());
-    	}
+    public void doDelete() {    	
         
     }
-    
+     
  
     /**
      * Invoca el servlet que imprime el reporte
      */
-    @SuppressWarnings("static-access")
 	public void doPrint() {        
-        
-        FWUsuario oFWUsuario = ((FWApplicationInstancePrincipal) this.getApplicationInstance().getActive()).getUsuario();
-        String usuario = oFWUsuario.getUsuario();
-        
-        String sUri = "PDFPreview?reporte=listadoContratos&usuario=" + usuario;
-
-        StringBuilder sb = new StringBuilder()
-                .append("width=640")
-                .append(",height=480")
-                .append(",resizable=yes")
-                .append(",scrollbars=yes");
-
-        Command oComm = new BrowserOpenWindowCommand(sUri, "Prueba", sb.toString());
-        ApplicationInstance.getActive().enqueueCommand(oComm);
+               
     }
     
         

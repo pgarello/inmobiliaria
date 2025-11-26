@@ -212,12 +212,17 @@ public class FWMenuBarPrincipal extends CCMenuBar implements nextapp.echo2.app.e
     		miItem2_1_3.addActionListener(this);
     		mMenu2_1.add(miItem2_1_3);
     		
-    		//mMenu2_1.add(new Separator());
-    	
-    		CCMenuItem miItem2_1_4 = new CCMenuItem("Rescindir Contrato");
-    		miItem2_1_4.setCommand("app.abms.contrato.ContratoRescindirFiltroView");
+    		CCMenuItem miItem2_1_4 = new CCMenuItem("Contratos a Reindexar");
+    		miItem2_1_4.setCommand("app.abms.contrato.ContratoListadoRevisarView");
     		miItem2_1_4.addActionListener(this);
     		mMenu2_1.add(miItem2_1_4);
+    		
+    		mMenu2_1.add(new Separator());
+    	
+    		CCMenuItem miItem2_1_5 = new CCMenuItem("Rescindir Contrato");
+    		miItem2_1_5.setCommand("app.abms.contrato.ContratoRescindirFiltroView");
+    		miItem2_1_5.addActionListener(this);
+    		mMenu2_1.add(miItem2_1_5);
     		
     	mMenu2.add(mMenu2_1);
     	

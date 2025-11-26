@@ -35,7 +35,7 @@ public class ContratoListadoVencidosModel extends AbstractTableModel {
 	
 	/** Cantidad de Columnas */
 	public int getColumnCount() { 
-		return 8; 
+		return 9; 
 	} 
 	
 	/** Cantidad de Filas */
@@ -77,6 +77,7 @@ public class ContratoListadoVencidosModel extends AbstractTableModel {
         	case 5: return Utiles.diasQueFaltan(fechaHasta);
         	case 6: return propietario;
         	case 7: return inquilino;
+        	case 8: return currentObject.getIdContrato();
         	default: return "error";
         }
 
@@ -94,6 +95,7 @@ public class ContratoListadoVencidosModel extends AbstractTableModel {
             case 5: return new String("Días");
             case 6: return new String("Propietario");
             case 7: return new String("Inquilino");
+            case 8: return new String("ID CONTRATO");
             default: return new String("ERROR");
         }
     }

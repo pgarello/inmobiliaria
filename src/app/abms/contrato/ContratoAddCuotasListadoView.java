@@ -11,6 +11,7 @@ import ccecho2.base.CCTextField;
 
 import nextapp.echo2.app.Alignment;
 import nextapp.echo2.app.ApplicationInstance;
+import nextapp.echo2.app.Color;
 import nextapp.echo2.app.Component;
 import nextapp.echo2.app.Extent;
 import nextapp.echo2.app.ImageReference;
@@ -21,6 +22,7 @@ import nextapp.echo2.app.event.ActionEvent;
 import nextapp.echo2.app.event.TableModelEvent;
 import nextapp.echo2.app.event.TableModelListener;
 import nextapp.echo2.app.layout.ColumnLayoutData;
+import nextapp.echo2.app.layout.TableLayoutData;
 import nextapp.echo2.app.list.ListSelectionModel;
 
 import nextapp.echo2.app.table.TableCellRenderer;
@@ -174,7 +176,7 @@ public class ContratoAddCuotasListadoView extends ABMListadoView implements Tabl
 					oFecha.set(Calendar.DAY_OF_MONTH, Cuota.dia_de_vencimiento);
 				}
 				
-				Cuota oCuota = new Cuota(i, monto_cuota, periodo_mes, periodo_anio, oFecha.getTime());
+				Cuota oCuota = new Cuota(i, monto_cuota, periodo_mes, periodo_anio, oFecha.getTime(), refClase.getContrato());
 				
 				dataList.add(oCuota);
 				
@@ -186,7 +188,29 @@ public class ContratoAddCuotasListadoView extends ABMListadoView implements Tabl
         oModel.setDataList(dataList);
         this.update(oModel, 0, 0);
         
+        this.oTable.setDefaultRenderer(Object.class, randomizingCellRenderer);
+        
     }
+    
+    private int fila_color = 0;    
+    private TableCellRenderer randomizingCellRenderer = new TableCellRenderer() {
+        
+        public Component getTableCellRendererComponent(Table table, Object value, int column, int row) {
+        	//System.out.println("haber " + value.getClass().getName() + " - " + column + " - " + row);
+        	/** Como hago para saber que la fila hay que pintarla de un color particular ¿? */        	
+        	Label label = new Label(value == null ? null : value.toString());
+        	
+        	if ((column == 4 && value.toString().equals("true")) || fila_color == row) {
+        		if (fila_color != row) fila_color = row;
+	            TableLayoutData layoutData = new TableLayoutData();
+	            layoutData.setBackground(Color.GREEN);            
+	            label.setLayoutData(layoutData);
+        	}
+            return label;
+        }
+        
+    };
+    
     
     
     /* Si quiero usar sobrecarga del método */

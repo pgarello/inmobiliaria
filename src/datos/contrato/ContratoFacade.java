@@ -88,6 +88,9 @@ public class ContratoFacade {
 	}
 	
 	public static Contrato update(Contrato detachedInstance) {
+		
+		// Quien controla las REGLAS DE NEGOCIO ??
+		
 		Session oSessionH = SessionFactory.currentSession();
 		/** La sesion la manejo en las clases que llaman - volví a habilitar la transacción para q grabe las modificaciones */
 		Transaction tx = oSessionH.beginTransaction();

@@ -3,6 +3,8 @@ package app.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import datos.contrato.Contrato;
+
 /**
  * Representa una cuota mensual de alquiler de un contrato
  * @author pablo
@@ -26,12 +28,17 @@ public class Cuota implements Serializable {
 	private Date fecha_vencimiento;
 	
 	private boolean parcheConstructor;
-
+		
+	private Contrato oContrato;
+	
 	// Constantes
 	/* 	Por ahora voy a trabajar con una constante, mas adelante vamos a levantar este dato de la
 	 	tabla SISTEMA */
 	public static short dia_de_vencimiento = 10;
-		
+	
+	
+// Constructores
+	
 	public Cuota() {}
 
 	public Cuota(short cuota, float valor) {
@@ -41,7 +48,7 @@ public class Cuota implements Serializable {
 		parcheConstructor = false;
 	}
 	
-	public Cuota(short cuota, double valor, short periodo_mes, short periodo_anio, Date fecha_vencimiento) {
+	public Cuota(short cuota, double valor, short periodo_mes, short periodo_anio, Date fecha_vencimiento, Contrato contrato) {
 		this.cuota = cuota;
 		this.valor = valor;
 		this.periodo_mes = periodo_mes;
@@ -49,6 +56,8 @@ public class Cuota implements Serializable {
 		this.fecha_vencimiento = fecha_vencimiento;
 //		this.saldo = saldo;
 //		this.pagado = pagado;
+		
+		this.oContrato = contrato;
 		
 		parcheConstructor = true;
 	}
@@ -144,6 +153,23 @@ public class Cuota implements Serializable {
 
 	public void setPeriodo_mes(short periodo_mes) {
 		this.periodo_mes = periodo_mes;
+	}
+	
+	/**
+	 * Nueva lógica que evalua si una CUOTA debe ser revisada por una actualización de precio
+	 * Ahora con la ley nueva de alquiler, los mismos se pueden actualizar cada X meses
+	 * pgarello 30/04/2024
+	 * @param cantMesesRevision
+	 * @return true/false
+	 */
+	public boolean seDebeRevisarMonto() {
+		
+		boolean respuesta = false;
+		
+		if (oContrato != null)		
+			respuesta = oContrato.seDebeRevisarMontoCuota(this);
+		
+		return respuesta;		
 	}
 	
 }
