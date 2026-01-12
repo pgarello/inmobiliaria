@@ -48,13 +48,20 @@ public class Configuracion extends Properties {
 		FileInputStream oInputStream = null;
 		
 		try {
-			oInputStream = new FileInputStream( System.getProperty("catalina.base") + "/conf/" + file);
 			
-			// Ambiente PRODUCCION
-			//oInputStream = new FileInputStream( "/etc/digitalizacion/" + file);
+			// Solo tiene valor si se ejecuta dentro de TOMCAT
+			if (System.getProperty("catalina.base") != null) {
 			
-			// Ambiente de TEST
-			// oInputStream = new FileInputStream( "/home/pgarello/" + file);
+				oInputStream = new FileInputStream( System.getProperty("catalina.base") + "/conf/" + file);
+			
+			} else {
+			
+				// Ambiente PRODUCCION
+				// oInputStream = new FileInputStream( "/etc/digitalizacion/" + file);
+			
+				// Ambiente de LOCAL
+				oInputStream = new FileInputStream( "/home/pgarello/" + file);
+			}
 			
 			props.load(oInputStream);
 		} catch(Exception e) {

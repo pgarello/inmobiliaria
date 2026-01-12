@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 import resources.Configuracion;
 
-public class HourlyJob /*implements Runnable*/ {
+public class HourlyJob implements Runnable {
 
 	//@Override
 	public void run() {
@@ -21,7 +21,7 @@ public class HourlyJob /*implements Runnable*/ {
 	    
 	    /** 1º Realizo el backup de la base de datos */
 	    int horaBACKUP = 10;
-	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	    if (oFecha.get(Calendar.HOUR_OF_DAY) == horaBACKUP)	    
 	    	realizarBackup(sdf.format(oFecha.getTime()));
 	    
@@ -33,29 +33,56 @@ public class HourlyJob /*implements Runnable*/ {
 	 */
 	public static boolean realizarBackup(String fecha) {
 				
+		System.out.println("HourlyJob.realizarBackup:" + fecha);
+		
 	    String username = "dba_inmobiliaria";
 	    String database = "inmobiliaria";
 	    String password = "dba";
-	    String file = System.getProperty("catalina.base") + "/temp/" + database + fecha + ".sql";
-	    String path = Configuracion.getInstance().getProperty("pathPGDUMP");
+	    
+	    // Construir la ruta del archivo
+	    String file = "";
+	    if (System.getProperty("catalina.base") != null) {
+	        file = System.getProperty("catalina.base") + "/temp/" + database + fecha + ".sql";
+	    } else {
+	        file = "/tmp/" + database + fecha + ".sql";
+	    }
 
+	    // Verificar si el directorio existe y crearlo si es necesario
+	    File outputDir = new File(file).getParentFile();
+	    if (!outputDir.exists()) {
+	        boolean dirsCreated = outputDir.mkdirs();
+	        if (!dirsCreated) {
+	            Logger.getLogger("Inmobiliaria").log(Level.SEVERE, "No se pudo crear el directorio de salida: " + outputDir.getPath());
+	            return false;
+	        }
+	    }
+
+	    // Obtener la ruta de pg_dump
+	    String path = Configuracion.getInstance().getProperty("pathPGDUMP");
+	    if (path == null || path.isEmpty()) {
+	        Logger.getLogger("Inmobiliaria").log(Level.SEVERE, "La ruta de pg_dump no está configurada correctamente");
+	        return false;
+	    }
+
+	    // Preparar el comando
 	    ProcessBuilder pb = new ProcessBuilder(
-	        path + "pg_dump",
-	        "-U", username,
-	        "-h", "localhost",
-	        database
+	            path + "pg_dump",   // Asegúrate de que esta ruta sea correcta
+	            "-U", username,
+	            "-h", "localhost",
+	            database
 	    );
 
-	    // Configuramos la variable de entorno del password
+	    // Configurar la variable de entorno para la contraseña
 	    pb.environment().put("PGPASSWORD", password);
 
-	    // Redirigimos salida del comando al archivo
+	    // Redirigir la salida del comando al archivo
 	    File outputFile = new File(file);
 	    pb.redirectOutput(outputFile);
 	    pb.redirectErrorStream(true);
 
 	    int success = -1;
 	    try {
+	        // Ejecutar el proceso
 	        Process process = pb.start();
 	        success = process.waitFor();
 
@@ -84,7 +111,7 @@ public class HourlyJob /*implements Runnable*/ {
 		Calendar oFecha = Calendar.getInstance();
 	    System.out.println(oFecha.getTime().toLocaleString() + " HourlyJob trigged by scheduler");
 	    
-	    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
    
 	    realizarBackup(sdf.format(oFecha.getTime()));
 		

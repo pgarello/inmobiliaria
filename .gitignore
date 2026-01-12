@@ -1,3 +1,13 @@
+# --- Credenciales de Google (Seguridad) ---
+# Ignorar el archivo de configuración de la app
+credentials.json
+src/main/resources/credentials.json
+
+# Ignorar la carpeta donde se guarda el permiso del usuario
+tokens/
+src/main/resources/tokens/
+
+
 /.gradle/
 /build/
 /.classpath
