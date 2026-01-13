@@ -20,7 +20,7 @@ public class HourlyJob implements Runnable {
 	    // Inicio el proceso
 	    
 	    /** 1º Realizo el backup de la base de datos */
-	    int horaBACKUP = 10;
+	    int horaBACKUP = 6;
 	    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	    if (oFecha.get(Calendar.HOUR_OF_DAY) == horaBACKUP)	    
 	    	realizarBackup(sdf.format(oFecha.getTime()));
@@ -34,10 +34,11 @@ public class HourlyJob implements Runnable {
 	public static boolean realizarBackup(String fecha) {
 				
 		System.out.println("HourlyJob.realizarBackup:" + fecha);
-		
-	    String username = "dba_inmobiliaria";
+			    
 	    String database = "inmobiliaria";
-	    String password = "dba";
+	    
+	    String username = Configuracion.getInstance().getProperty("bd_username");
+	    String password = Configuracion.getInstance().getProperty("bd_password");
 	    
 	    // Construir la ruta del archivo
 	    String file = "";
